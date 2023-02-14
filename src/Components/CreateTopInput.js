@@ -1,108 +1,79 @@
 import '../styles/CreateTop.css';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { useForm } from 'react-hook-form';
+import Form from 'react-bootstrap/Form';
+
 import TextField from '@mui/material/TextField';
-import AddIcon from '@mui/icons-material/Add';
-
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import { useState } from 'react';
-import { Html, HtmlOutlined } from '@mui/icons-material';
 
+ 
 
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { TransitionGroup } from 'react-transition-group';
-import Autocomplete from '@mui/material/Autocomplete';
-
-const FRUITS = [
-  '🍏 Apple',
-  '🍌 Banana',
-  '🍍 Pineapple',
-  '🥥 Coconut',
-  '🍉 Watermelon',
-];
-
-function renderItem({ item, handleRemoveFruit }) {
-  return (
-    <ListItem
-      secondaryAction={
-        <IconButton
-          edge="end"
-          aria-label="delete"
-          title="Delete"
-          onClick={() => handleRemoveFruit(item)}
-        >
-          <DeleteIcon />
-        </IconButton>
-      }
-    >
-      <ListItemText primary={item} />
-    </ListItem>
-  );
-}
 
 function CreateTop() {
-  const [fruitsInBasket, setFruitsInBasket] = useState(FRUITS.slice(0, 3));
 
-  const handleAddFruit = () => {
-    const nextHiddenItem = FRUITS.find((i) => !fruitsInBasket.includes(i));
-    if (nextHiddenItem) {
-      setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
-    }
-  };
+  const { register, handleSubmit, formState: {errors} } = useForm();
+  const [ tops, setTops ] = useState([]);
+  
+  function SaveTop(data) {
 
-  const handleRemoveFruit = (item) => {
-    setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
-  };
+    const newTop = {
+      titre: data.titre,
+      motCle: data.motCle,
+      choix: {
+        choix1: data.choix1,
+        choix2: data.choix2,
+        choix3: data.choix3,
+        choix4: data.choix4,
+        choix5: data.choix5,
+        choix6: data.choix6,
+        choix7: data.choix7,
+        choix8: data.choix8,
+        choix9: data.choix9,
+        choix10: data.choix10,
+      }
+    };
 
-  const addFruitButton = (
-    <Button
-      variant="contained"
-      disabled={fruitsInBasket.length >= 10}
-      onClick={handleAddFruit}
-    >
-      Ajout d'un top
-    </Button>
-  );
+    const copyTop = [...tops];
+    copyTop.push(newTop)
+    setTops(copyTop);
+    console.log(copyTop);
+  }
+
+
 
   return (
     <div id='createTop'>
-        <Box 
-            component="form"
-            sx={{
-                '& > :not(style)': { m: 1, width: '90%' },
-            }}
-            noValidate
-            autoComplete="off"
 
-        >
-          <TextField id="titre" label="Titre" variant="standard" />
-          <TextField id="hashtag" label="Mots-clés / #" variant="standard" freeSolo />
-          
-          
+        <Form onSubmit={handleSubmit(SaveTop)}>
 
-        </Box>
+          <TextField id="standard-basic" label="Titre du top" variant="standard" {...register('titre', {required: "Il faut choisir un titre !"})}  />
+          <p className="error">{errors.titre && errors.titre.message}</p>
+          <TextField id="standard-basic" label="Mot clés" variant="standard" {...register('motCle', {required: "Il faut choisir un mot-clé !"})}  />
+          <p className="error">{errors.motCle && errors.motCle.message}</p> 
 
-        <p>Classement (possible de 3 à 10)</p>
-        {addFruitButton}
-        <Box sx={{ mt: 1 }}>
-          
-          <List>
-            <TransitionGroup>
-              {fruitsInBasket.map((item) => (
-                <Collapse key={item}>
-                  {renderItem({ item, handleRemoveFruit })}
-                </Collapse>
-              ))}
-            </TransitionGroup>
-          </List>
-        </Box>
+          <h2>Classement (possible de 1 à 10)</h2>
 
-   
+          <h1>1</h1><TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix1')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix2')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix3')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix4')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix5')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix6')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix7')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix8')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix9')}  /><br/>
+          <TextField id="standard-basic" label="Inscrire le choix" variant="standard" {...register('choix10')}  /><br/>
+
+          <Stack direction="row">
+              <Button color='secondary' variant="contained" type="submit" >
+              Valider
+              </Button>
+          </Stack>
+
+        </Form> 
+
     </div>
   );
 }
