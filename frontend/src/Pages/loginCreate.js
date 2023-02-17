@@ -21,101 +21,92 @@ import TextField from '@mui/material/TextField';
 
 function LoginCreate() {
 
+  //Mise en place de la gestion du form avec useForm
+    const {register, handleSubmit, formState: {errors}} = useForm();
+
   //Settigs des alertes
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'bottom',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: false
-  })
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: false
+    })
 
-  const {register, handleSubmit, formState: {errors}} = useForm();
-  
-  const [isExistAccount, setisExistAccount] = useState();
-  const [MsgCompte, setMsgCompte] = useState('');
+    const [isExistAccount, setisExistAccount] = useState(true);
+    const [MsgCompte, setMsgCompte] = useState('');
 
 
-  const [values, setValues] = useState({
-    amount: '',
-    password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
+    const [values, setValues] = useState({
+      amount: '',
+      password: '',
+      weight: '',
+      weightRange: '',
+      showPassword: false,
     });
-  };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    const handleChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const handleClickShowPassword = () => {
+      setValues({
+        ...values,
+        showPassword: !values.showPassword,
+      });
+    };
+
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+    };
 
 
-  function addUserAccount(data) {
 
-    const GeneratingID = new Date().getTime();
-    const newUserAccount = {id: GeneratingID, login: data.login, email: data.email, password: data.password};
-    let VerifCreateAccount = false;
-    
-    const form_data = new FormData();
-    for ( var key in newUserAccount ) {
-        form_data.append(key, newUserAccount[key]);
-    }
-    form_data.append('AddUserAccount', 'AddUserAccount');
 
-    // Recuperation des account user
-      axios({
-        method: 'get',
-        url: 'http://localhost/WISHLIST%20REACT/whishlist_v2/src/Datas/datas_ctrl.php',
-        params: { Recup_UsersAccount: 'Recup_UsersAccount' }
-      })
-      .then(function (response) { 
-        console.log('Reception des users des le début',response.data); 
-        
-        for ( var key in response.data ) {
-          if ( response.data[key].email === newUserAccount.email ) {
+    function AddUser(data) {
+
+      // Récupération des données du formulaire
+      const newUserAccount = {
+        email: data.email,
+        password: data.password
+      };
+
+      // Recuperation des account user
+        axios({
+          method: 'get',
+          url: `http://localhost:5000/users/${newUserAccount.email}`
+        })
+        .then(function (response) { 
+          if ( response.data ) {
             setisExistAccount(true)
-            VerifCreateAccount = true;
             setMsgCompte('Le compte existe déja');
-          }      
-        }
-
-        if ( VerifCreateAccount === false ) {
-          // Enregistrement du nouvel user account
+          }else{
+            // Enregistrement du nouvel user account
             axios({
               method: 'post',
-              url: 'http://localhost/WISHLIST%20REACT/whishlist_v2/src/Datas/datas_ctrl.php',
-              data: form_data
+              url: 'http://localhost:5000/users',
+              data: newUserAccount
             }).then(function () {
-              setisExistAccount(false);
+              setisExistAccount(false)
               Toast.fire({
                 icon: 'success',
                 title: "Le compte a bien été créé !",         
               })
-            }); 
-        }
-               
-        
-      }); 
+            }).catch(({ response }) => { 
+              console.log(response); 
+            })
+          }   
+        }); 
 
-      
-    
-  }
+    }
+
+
 
   return (
     <>
-    
+   
 
-    <Form onSubmit={handleSubmit(addUserAccount)} id="FormLoginCreate">
+    <Form onSubmit={handleSubmit(AddUser)} id="FormLoginCreate">
 
 
       <Box>
@@ -166,13 +157,11 @@ function LoginCreate() {
         </FormControl>
         <p className="error">{errors.password && errors.password.message}</p>
 
-        {isExistAccount !== undefined && (isExistAccount ? <p className="error">{MsgCompte}</p> : <Navigate to="/login" />)}
-        {console.log('isExistAccount', isExistAccount)}
-        {console.log('MsgCompte', MsgCompte)}
+        {isExistAccount ? <p className="error">{MsgCompte}</p> : <Navigate to="/login" />}
 
 
         <button type="submit" id="buttonSubmit">ENREGISTRER</button>
-        <NavLink to='/'><button type="button" id="buttonRetourSubmit">RETOUR</button></NavLink>
+        <NavLink to='/login'><button type="button" id="buttonRetourSubmit">RETOUR</button></NavLink>
 
         
       </Box>

@@ -4,11 +4,14 @@ import cors from "cors";
 import UserRoute from "./routes/UserRoute.js";
  
 const app = express();
+
+mongoose.set('strictQuery', false);
 mongoose.connect('mongodb+srv://tof:Montotof14@cluster0.rzkyfqb.mongodb.net/?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 const db = mongoose.connection;
+
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('Database Connected...'));
  
