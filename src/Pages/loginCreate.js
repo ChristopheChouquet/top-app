@@ -121,26 +121,6 @@ function LoginCreate() {
       <Box>
         <h1>CREATION DE COMPTE</h1>
 
-       
-        <TextField sx={{ m: 1, width: '25ch' }} 
-          id="login" 
-          label="login"
-          variant="standard" 
-          autoComplete="off"
-          {...register("login", { 
-            required: "Il faut remplir le login", 
-            maxLength: {
-              value: 20, 
-              message: "Maximum 20 caracteres"
-            },  
-            minLength: {
-              value: 3, 
-              message: "Minimum 3 caracteres"
-            }  
-          })}
-        />
-        <p className="error">{errors.login && errors.login.message}</p>
-
         <TextField sx={{ m: 1, width: '25ch' }} 
           id="email"
           label="email" 
