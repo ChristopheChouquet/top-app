@@ -21,7 +21,7 @@ function LoginCreate() {
   //Gestion du message d'erreur
     const [MsgCompte, setMsgCompte] = useState('');
 
-
+  //Ajout des nouveuax users dans la base de donnée
     function AddUser(data) {
 
       // Récupération des données du formulaire
@@ -58,7 +58,6 @@ function LoginCreate() {
         }); 
 
     }
-
 
 
   return (
