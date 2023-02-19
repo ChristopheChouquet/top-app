@@ -33,7 +33,7 @@ function LoginCreate() {
       // Recuperation des account user
         axios({
           method: 'get',
-          url: `http://localhost:5000/users/${newUserAccount.email}`
+          url: `http://localhost:5000/signup/${newUserAccount.email}`
         })
         .then(function (response) { 
           if ( response.data ) {
@@ -43,7 +43,7 @@ function LoginCreate() {
             // Enregistrement du nouvel user account
             axios({
               method: 'post',
-              url: 'http://localhost:5000/users',
+              url: 'http://localhost:5000/signup',
               data: newUserAccount
             }).then(function () {
               setisExistAccount(false)
@@ -56,6 +56,9 @@ function LoginCreate() {
             })
           }   
         }); 
+
+
+        
 
     }
 

@@ -93,7 +93,7 @@ function Formlogin({ datas, UserAccountisOK, MsgCompte }) {
                 </FormControl>
                 <p className="error">{errors.password && errors.password.message}</p>
 
-                {UserAccountisOK ? <Navigate to="/home" /> : <p className="error">{MsgCompte}</p>}
+                <p className="error">{MsgCompte}</p>
 
                 <button type="submit" id="buttonSubmitLogin">CONNEXION</button>
                 <p>Pas de compte ?<br></br><NavLink to='/loginCreate'>S'INSCRIRE</NavLink></p>

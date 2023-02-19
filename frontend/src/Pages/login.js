@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from "axios";
 
 import Formlogin from '../Components/Formlogin';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
@@ -12,32 +13,31 @@ function Login() {
   //Gestion du message d'erreur
     const [MsgCompte, setMsgCompte] = useState('');
 
+  // initialisation de l'objet navigate
+    const navigate = useNavigate();   
+
   //Gestion de la connexion user
     function loginConnect(data) {
 
-      const InfoUser = {email: data.email, password: data.password};
-
-      // Recuperation des account user
-        const form_data = new FormData();
-        for ( var key in InfoUser ) {
-            form_data.append(key, InfoUser[key]);
-        }
-        form_data.append('ConnectUSer', 'ConnectUSer');
-        axios({
+      const InfoUser = {
+        email: data.email,
+        password: data.password
+      };
+      
+      axios({
           method: 'post',
-          url: 'http://localhost/WISHLIST%20REACT/whishlist_v2/src/Datas/datas_ctrl.php',
-          data: form_data
+          url: 'http://localhost:5000/login',
+          data: InfoUser
         }).then(function (response) {
-          if (response.data !== 'NOPE') {
-            sessionStorage.setItem('UserAccountisOK', true);
+          console.log(response); 
             setUserAccountisOK(true);
             setMsgCompte('');
-            
-          }else{
-            sessionStorage.setItem('UserAccountisOK', false);
+            console.log("ok connect");
+            navigate('/');
+        }).catch(() => { 
             setUserAccountisOK(false);
             setMsgCompte('Aucun compte associé');
-          }
+            console.log("pas le droit connect");
         }); 
 
     }
