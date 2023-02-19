@@ -30,35 +30,20 @@ function LoginCreate() {
         password: data.password
       };
 
-      // Recuperation des account user
+      // Enregistrement du nouvel user account
         axios({
-          method: 'get',
-          url: `http://localhost:5000/signup/${newUserAccount.email}`
+          method: 'post',
+          url: 'http://localhost:5000/signup',
+          data: newUserAccount
+        }).then((response) => {
+          setisExistAccount(false)
+          Toast.fire({
+            icon: 'success',
+            title: response.data.message,         
+          })
+        }).catch(({ response }) => { 
+          setMsgCompte(response.data.message);
         })
-        .then(function (response) { 
-          if ( response.data ) {
-            setisExistAccount(true)
-            setMsgCompte('Le compte existe déja');
-          }else{
-            // Enregistrement du nouvel user account
-            axios({
-              method: 'post',
-              url: 'http://localhost:5000/signup',
-              data: newUserAccount
-            }).then(function () {
-              setisExistAccount(false)
-              Toast.fire({
-                icon: 'success',
-                title: "Le compte a bien été créé !",         
-              })
-            }).catch(({ response }) => { 
-              console.log(response); 
-            })
-          }   
-        }); 
-
-
-        
 
     }
 

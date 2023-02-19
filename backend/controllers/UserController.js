@@ -20,16 +20,6 @@ export const getUsers = async (req, res) => {
 }
  
 
-export const getUserByemail = (req, res) => {
-    User.findOne({email: req.params.email}).exec()
-    .then(user => {
-        res.json(user);
-    })
-    .catch(error => {
-        res.status(404).json({ error });
-    });
-};
- 
 export const saveUser = (req, res, next) => {
     //On hash le mot de passe recu, 10 correspond au nombre d'itération, cela rend plus sécure mais pas trop lent 
     bcrypt.hash(req.body.password, 10)
