@@ -66,21 +66,22 @@ export const login = (req, res, next) => {
                 if (!valid) {
                     res.status(401).json({ message: 'Paire identifiant/Mot de passe incorrect'});
                 }else{
-                    //On inclut le token dans un cookie avec la méthode res.cookie()
-                    res.cookie('token', jwt.sign(
+                    //On cré le token qui comprend l'id de l'user, la phrase secrete et le temps d'expiration
+                    const token = jwt.sign(
                         { userId: user._id },
-                        'RANDOM_TOKEN_SECRET',
+                        'RANDOM_TOKEN_SECRET_kfjhfsdjfhsdhfdsj6767232300YYHDBD',
                         { expiresIn: '24h' }
-                    ));
+                    );
+                    //On inclut le token dans un cookie avec la méthode res.cookie()
+                    res.cookie('token', token);    
+                    //On inclut le token dans le header Authorization
+                    res.set('Authorization', `Bearer ${token}`);
                     //On revoie l'id et le token dans la réponse
                     res.status(200).json({
                         userId: user._id, 
-                        token: jwt.sign(
-                            { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
-                            { expiresIn: '24h' }
-                        )
+                        token: token
                     });
+                    
                 }
             })
             .catch(error => res.status(500).json({ error }));
@@ -92,6 +93,7 @@ export const login = (req, res, next) => {
 
 //On créé le middleware permettant de se deco
 export const logout = (req, res, next) => {
+    
     
     res.clearCookie('token');
     res.status(200).json({ message: 'Déconnecté avec succès' });

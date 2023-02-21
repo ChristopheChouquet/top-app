@@ -6,11 +6,28 @@ import Footer from '../Components/Footer';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function TopCreate() {
 
     // initialisation de l'objet navigate
-        const navigate = useNavigate(); 
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+        const cookie = document.cookie;
+
+        // Recherche du token d'authentification dans le cookie
+        const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
+
+        // Extrait la valeur du token d'authentification
+        const tokenValue = token ? token.split('=')[1] : null;
+        console.log(tokenValue);
+        var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
+        console.log(verifAuth);
+        !verifAuth && navigate('/login');
+    }, []);
+
+    
 
     //Settigs des alertes
         const Toast = Swal.mixin({
@@ -24,6 +41,14 @@ function TopCreate() {
         
 
     function SaveTop(datasForm) {
+
+        const cookie = document.cookie;
+
+        // Recherche du token d'authentification dans le cookie
+        const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
+
+        // Extrait la valeur du token d'authentification
+        const tokenValue = token ? token.split('=')[1] : null;
 
         const newTop = {
           titre: datasForm.titre,
@@ -46,7 +71,10 @@ function TopCreate() {
         axios({
             method: 'post',
             url: 'http://localhost:5000/tops',
-            data: newTop
+            data: newTop,
+            headers: {
+              Authorization: 'Bearer ' + tokenValue
+            }
         }).then(function () {
             Toast.fire({
                 icon: 'success',

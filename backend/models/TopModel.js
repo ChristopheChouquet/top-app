@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const Top = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true
+    },
     titre: {
         type: String,
         required: true

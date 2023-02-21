@@ -11,11 +11,11 @@ function Home() {
         const [top, setTop] = useState([]); 
 
     useEffect(() => {
+
         axios({
             method: 'get',
             url: 'http://localhost:5000/tops'
         }).then((response) => {
-            console.log(response.data); 
             setTop(response.data);
         }).catch((error) => { 
             console.error(error);
@@ -29,6 +29,17 @@ function Home() {
 
     //Gestion de la connexion user
         function logout() {  
+
+        // Récupérer tous les cookies
+            var cookies = document.cookie.split(";");
+
+        // supprimer les cookies
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
             
             axios({
                 method: 'post',
@@ -49,6 +60,7 @@ function Home() {
             <div id="home">
                 <h1>C'est le Wall !!</h1>
                 <button type="submit" onClick={logout}>deco</button>
+                <a href="/topcreate">Allez a la page de creation de tops</a>
 
                 {top.map(top => (
                     <div key={top._id}>
