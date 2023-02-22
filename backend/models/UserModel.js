@@ -21,5 +21,8 @@ const User = mongoose.Schema({
         default: Date.now
     }
 });
+
+//Un seul utilisateur par adresse mail
+    User.plugin(uniqueValidator); 
  
 export default mongoose.model('Users', User);

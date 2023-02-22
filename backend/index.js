@@ -4,8 +4,12 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+
+//Import des différentes routes créées
 import UserRoute from "./routes/UserRoute.js";
 import TopRoute from "./routes/TopRoute.js";
+
+//Permet d'avoir acces aux cookies dans toutes les routes indiquées
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -23,6 +27,7 @@ db.once('open', () => console.log('Database Connected...'));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+//On rajoute les rajoute a ll'API express
 app.use(UserRoute);
 app.use(TopRoute);
 

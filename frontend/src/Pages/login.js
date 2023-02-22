@@ -29,7 +29,21 @@ function Login() {
           url: 'http://localhost:5000/login',
           data: InfoUser
         }).then(function (response) {
-          console.log(response); 
+          
+          // Définition du nom du cookie et de la valeur à stocker
+            const cookieName = 'auth';
+            const tokenValue = response.data.token;
+
+            // Définition de la date d'expiration du cookie (facultatif)
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 7); // Expire dans 7 jours
+
+            // Création de la chaîne de caractères qui représente le cookie
+            const cookieString = `${cookieName}=${tokenValue};expires=${expirationDate.toUTCString()};path=/`;
+
+            // Stockage du cookie dans le navigateur
+            document.cookie = cookieString;
+
             setUserAccountisOK(true);
             setMsgCompte('');
             console.log("ok connect");

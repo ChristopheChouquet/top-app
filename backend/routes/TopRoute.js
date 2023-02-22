@@ -3,11 +3,10 @@ import {
     getAllTops,
     saveTop,
 } from "../controllers/TopController.js";
-import auth from '../middleware/auth.js';
  
 const router = express.Router();
  
-router.get('/tops', auth, getAllTops);
-router.post('/tops', auth, saveTop);
+router.get('/tops', getAllTops);
+router.post('/tops', saveTop);
  
 export default router;
