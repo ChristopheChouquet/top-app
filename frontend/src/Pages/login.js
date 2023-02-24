@@ -36,7 +36,7 @@ function Login() {
 
             // Définition de la date d'expiration du cookie (facultatif)
             const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 7); // Expire dans 7 jours
+            expirationDate.setDate(expirationDate.getDate() + 1); // Expire dans 1 jours
 
             // Création de la chaîne de caractères qui représente le cookie
             const cookieString = `${cookieName}=${tokenValue};expires=${expirationDate.toUTCString()};path=/`;
@@ -46,12 +46,10 @@ function Login() {
 
             setUserAccountisOK(true);
             setMsgCompte('');
-            console.log("ok connect");
             navigate('/');
         }).catch(() => { 
             setUserAccountisOK(false);
             setMsgCompte('Aucun compte associé');
-            console.log("pas le droit connect");
         }); 
 
     }

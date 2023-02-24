@@ -45,7 +45,6 @@ function Home() {
                 method: 'post',
                 url: 'http://localhost:5000/logout'
             }).then(function (response) {
-                console.log(response); 
                 navigate('/login');
             }).catch(() => { 
                 

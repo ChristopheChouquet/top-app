@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
+
 function TopCreate() {
 
     // initialisation de l'objet navigate
@@ -21,9 +22,7 @@ function TopCreate() {
 
         // Extrait la valeur du token d'authentification
         const tokenValue = token ? token.split('=')[1] : null;
-        console.log(tokenValue);
         var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
-        console.log(verifAuth);
         !verifAuth && navigate('/login');
     }, []);
 
@@ -41,6 +40,7 @@ function TopCreate() {
         
 
     function SaveTop(datasForm) {
+        
 
         const cookie = document.cookie;
 
@@ -54,15 +54,15 @@ function TopCreate() {
           titre: datasForm.titre,
           motCle: datasForm.motCle,
           choix: {
-            choix1: datasForm.choix1,
-            choix2: datasForm.choix2,
-            choix3: datasForm.choix3,
-            choix4: datasForm.choix4,
-            choix5: datasForm.choix5,
-            choix6: datasForm.choix6,
-            choix7: datasForm.choix7,
-            choix8: datasForm.choix8,
-            choix9: datasForm.choix9,
+            choix1: datasForm.choix01,
+            choix2: datasForm.choix02,
+            choix3: datasForm.choix03,
+            choix4: datasForm.choix04,
+            choix5: datasForm.choix05,
+            choix6: datasForm.choix06,
+            choix7: datasForm.choix07,
+            choix8: datasForm.choix08,
+            choix9: datasForm.choix09,
             choix10: datasForm.choix10,
           }
         };
@@ -81,8 +81,8 @@ function TopCreate() {
                 title: "Le top a bien été ajouté !",         
             })
             navigate('/');
-        }).catch(({ response }) => { 
-            console.log(response); 
+        }).catch(({ error }) => { 
+            console.log(error); 
         });
 
     }
