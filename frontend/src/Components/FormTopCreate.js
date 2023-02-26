@@ -37,16 +37,11 @@ function FormTopCreate({ datas }) {
                 motCle: {},
                 choix: {}
               };
-              //On parcours tous les mot clés et on récupére leur valeur
+              //Si aucun mot clé n'est tapé, on place le titre en unique mot clé
               if (chipData.length === 0) {
-                const newChipTitre = {
-                    key: `chip${chipData.length + 1}`,
-                    label: data.titre,
-                };
-                const addChip = [...chipData, newChipTitre];
-                setChipData(addChip);
-                console.log(newChipTitre);
+                newTop.motCle[`chip1`] = data.titre;
               }
+              //On parcours tous les mot clés et on récupére leur valeur
               for (let i = 0; i < chipData.length; i++) {
                 newTop.motCle[`chip${i+1}`] = chipData[i].label;
               }
