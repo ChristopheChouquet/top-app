@@ -10,8 +10,21 @@ const Top = new mongoose.Schema({
         required: true
     },
     motCle: {
-        type: String,
-        required: true
+        chip1: {
+            type: String
+        },
+        chip2: {
+            type: String
+        },
+        chip3: {
+            type: String
+        },
+        chip4: {
+            type: String
+        },
+        chip5: {
+            type: String
+        }
     },
     choix: {
         choix1: {

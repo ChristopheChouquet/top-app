@@ -42,6 +42,7 @@ function TopCreate() {
         
 
     function SaveTop(datasForm) {
+        console.log('datasForm', datasForm);
 
         const cookie = document.cookie;
 

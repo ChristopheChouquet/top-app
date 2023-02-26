@@ -64,7 +64,6 @@ function Home() {
                 {top.map(top => (
                     <div key={top._id}>
                         <h3>{top.titre}</h3>
-                        <p>{top.motCle}</p>
                         <p>{top.choix.choix1}</p>
                         <p>{top.choix.choix2}</p>
                         <p>{top.choix.choix3}</p>

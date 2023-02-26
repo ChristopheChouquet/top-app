@@ -13,31 +13,49 @@ import Badge from '@mui/material/Badge';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import FormChips from './Formchips';
 
   
 function FormTopCreate({ datas }) {
-
+        //Gestion du Hook form
         const { register, handleSubmit, formState: {errors} } = useForm();
 
+        //Usetate des chips (mot clés)
+        const [chipData, setChipData] = useState([]);
+
+        //Usetate des choix
         const [ Choix, setChoix ] = useState([
             {id: "choix01", name: "choix01", value: ""}
         ].slice(0, 10));
 
-        const onSubmit = function (data) {
-            
+        //Fonction appelée lors de la validation du formulaire
+        const onSubmit = function (data) {   
+
             //On créé l'obet qui va etre envoyé au serveur
             const newTop = {
                 titre: data.titre,
-                motCle: data.motCle,
+                motCle: {},
                 choix: {}
               };
-              
+              //On parcours tous les mot clés et on récupére leur valeur
+              if (chipData.length === 0) {
+                const newChipTitre = {
+                    key: `chip${chipData.length + 1}`,
+                    label: data.titre,
+                };
+                const addChip = [...chipData, newChipTitre];
+                setChipData(addChip);
+                console.log(newChipTitre);
+              }
+              for (let i = 0; i < chipData.length; i++) {
+                newTop.motCle[`chip${i+1}`] = chipData[i].label;
+              }
+              //On parcours tous les choix et on récupére leur valeur
               for (let i = 0; i < Choix.length; i++) {
                 newTop.choix[`choix${i+1}`] = Choix[i].value;
               }
             //On envoie le nouveau top au serveur
             datas(newTop);
- 
         }
 
         //Met à jour le state Choix a chque fois que la valeur d'un champ de texte change
@@ -52,9 +70,8 @@ function FormTopCreate({ datas }) {
             newChoix[choixIndex].value = value;
             //On met à jour le state
             setChoix(newChoix);
-          }
-
-       
+        }
+     
         //Gestion du drag and drop
         function handleOnDragEnd(result) {
             if(!result.destination) return;
@@ -65,6 +82,7 @@ function FormTopCreate({ datas }) {
             setChoix(newBox);
         }
 
+        //Supprimer un choix de la liste
         function deleteChoix(id) {
             const lengthChoix = Choix.length+1;
             if (lengthChoix > 2) {
@@ -72,11 +90,10 @@ function FormTopCreate({ datas }) {
                 const choixIndex = delChoix.findIndex(choix => choix.id === id);
                 delChoix.splice(choixIndex, 1);
                 setChoix(delChoix);
-            }
-            
-            
+            } 
         }
 
+        //Ajouter un choix
         function addChoix() {
             const lengthChoix = Choix.length+1;
             if (lengthChoix <= 10) {
@@ -93,65 +110,69 @@ function FormTopCreate({ datas }) {
         
 
    return(
-            
-        <Form onSubmit={handleSubmit(onSubmit)}>
-
-            <TextField id="standard-basic" label="Titre du top" variant="standard" {...register('titre', {required: "Il faut choisir un titre !"})}  />
+        <>
+            <TextField 
+                id="standard-basic" 
+                label="Titre du top" 
+                variant="standard"
+                {...register('titre', {required: "Il faut choisir un titre !"})}  
+            />
             <p className="error">{errors.titre && errors.titre.message}</p>
-            <TextField id="standard-basic" label="Mot clés" variant="standard" {...register('motCle', {required: "Il faut choisir un mot-clé !"})}  />
-            <p className="error">{errors.motCle && errors.motCle.message}</p> 
 
-            <h2>Classement (possible de 1 à 10)</h2>
+            <FormChips chipData={chipData} setChipData={setChipData}/>
+            <Form onSubmit={handleSubmit(onSubmit)}>
 
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="boxes">
-                    {(provided) => (
-                    <ul ref={provided.innerRef} {...provided.droppableProps}>
-                        {Choix.map(({id, name}, index) => 
-                        <Draggable key={id} draggableId={id.toString()} index={index}>
-                            {(provided) => (
-                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                <div className={`box ${name}`}>
-                                    <Stack
-                                        direction="row"
-                                        divider={<Divider orientation="vertical" flexItem />}
-                                        spacing={2}
-                                    >
-                                        <ClearIcon onClick={() => deleteChoix(id)}/>
-                                        <Badge color="secondary" badgeContent={index+1} showZero>
-                                        <TextField 
-                                            id={id}
-                                            variant="standard" 
-                                            InputProps={{startAdornment: (<InputAdornment position="start">{index+1}</InputAdornment>),}}
-                                            {...register(name, {required: "Il faut choisir !"})} 
-                                            onChange={handleInputChange}  
-                                        />
-                                        </Badge>
-                                        <ClearAllIcon/>
-                                    </Stack>
-                                    <p className="error">{errors[name] && errors[name]?.message}</p>
+                <h2>Classement (possible de 1 à 10)</h2>
+
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId="boxes">
+                        {(provided) => (
+                        <ul ref={provided.innerRef} {...provided.droppableProps}>
+                            {Choix.map(({id, name}, index) => 
+                            <Draggable key={id} draggableId={id.toString()} index={index}>
+                                {(provided) => (
+                                <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                                    <div className={`box ${name}`}>
+                                        <Stack
+                                            direction="row"
+                                            divider={<Divider orientation="vertical" flexItem />}
+                                            spacing={2}
+                                        >
+                                            <ClearIcon onClick={() => deleteChoix(id)}/>
+                                            <Badge color="secondary" badgeContent={index+1} showZero>
+                                            <TextField 
+                                                id={id}
+                                                variant="standard" 
+                                                InputProps={{startAdornment: (<InputAdornment position="start">{index+1}</InputAdornment>),}}
+                                                {...register(name, {required: "Il faut choisir !"})} 
+                                                onChange={handleInputChange}  
+                                            />
+                                            </Badge>
+                                            <ClearAllIcon/>
+                                        </Stack>
+                                        <p className="error">{errors[name] && errors[name]?.message}</p>
+                                    </div>
                                 </div>
-                            </div>
+                                )}
+                            </Draggable>
                             )}
-                        </Draggable>
+                            {provided.placeholder}
+                        </ul>
                         )}
-                        {provided.placeholder}
-                    </ul>
-                    )}
-                </Droppable>
-            </DragDropContext>
-            <AddIcon onClick={addChoix}/>
-          
+                    </Droppable>
+                </DragDropContext>
 
-            <Stack direction="row">
-                <Button color='secondary' variant="contained" type="submit" >
-                Valider
-                </Button>
-            </Stack>
+                <AddIcon onClick={addChoix}/>
+
+                <Stack direction="row" justifyContent="center">
+                    <Button color='secondary' variant="contained" type="submit" >
+                    Valider
+                    </Button>
+                </Stack>
 
 
-        </Form>
-
+            </Form>
+        </>                        
     )
     
 }
