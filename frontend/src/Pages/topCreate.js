@@ -24,7 +24,9 @@ function TopCreate() {
         const tokenValue = token ? token.split('=')[1] : null;
         var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
         !verifAuth && navigate('/login');
+    // eslint-disable-next-line
     }, []);
+    
 
     
 
@@ -40,7 +42,6 @@ function TopCreate() {
         
 
     function SaveTop(datasForm) {
-        
 
         const cookie = document.cookie;
 
@@ -50,28 +51,11 @@ function TopCreate() {
         // Extrait la valeur du token d'authentification
         const tokenValue = token ? token.split('=')[1] : null;
 
-        const newTop = {
-          titre: datasForm.titre,
-          motCle: datasForm.motCle,
-          choix: {
-            choix1: datasForm.choix01,
-            choix2: datasForm.choix02,
-            choix3: datasForm.choix03,
-            choix4: datasForm.choix04,
-            choix5: datasForm.choix05,
-            choix6: datasForm.choix06,
-            choix7: datasForm.choix07,
-            choix8: datasForm.choix08,
-            choix9: datasForm.choix09,
-            choix10: datasForm.choix10,
-          }
-        };
-
         // Enregistrer le nouveau top 
         axios({
             method: 'post',
             url: 'http://localhost:5000/tops',
-            data: newTop,
+            data: datasForm,
             headers: {
               Authorization: 'Bearer ' + tokenValue
             }
@@ -91,7 +75,7 @@ function TopCreate() {
     return(
         <>
             <Header/>
-            <FormTopCreate datas={SaveTop}/>
+            <FormTopCreate datas={SaveTop} />
             <Footer/>
         </>
     )
