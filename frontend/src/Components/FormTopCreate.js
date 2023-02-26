@@ -7,6 +7,8 @@ import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AddIcon from '@mui/icons-material/Add';
+import InputAdornment from '@mui/material/InputAdornment';
+import Badge from '@mui/material/Badge';
 
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
@@ -17,42 +19,22 @@ function FormTopCreate({ datas }) {
 
         const { register, handleSubmit, formState: {errors} } = useForm();
 
-
         const [ Choix, setChoix ] = useState([
+            {id: "choix01", name: "choix01", value: ""}
+        ].slice(0, 10));
 
-            {id: "choix01", name: "choix01", value: ""},
-            {id: "choix02", name: "choix02", value: ""},
-            {id: "choix03", name: "choix03", value: ""},
-            {id: "choix04", name: "choix04", value: ""},
-            {id: "choix05", name: "choix05", value: ""},
-            {id: "choix06", name: "choix06", value: ""},
-            {id: "choix07", name: "choix07", value: ""},
-            {id: "choix08", name: "choix08", value: ""},
-            {id: "choix09", name: "choix09", value: ""},
-            {id: "choix10", name: "choix10", value: ""}
-        ]);
-
-       
-
-        const onSubmit = function (data, event) {
+        const onSubmit = function (data) {
             
             //On créé l'obet qui va etre envoyé au serveur
             const newTop = {
                 titre: data.titre,
                 motCle: data.motCle,
-                choix: {
-                    choix1: Choix[0].value,
-                    choix2: Choix[1].value,
-                    choix3: Choix[2].value,
-                    choix4: Choix[3].value,
-                    choix5: Choix[4].value,
-                    choix6: Choix[5].value,
-                    choix7: Choix[6].value,
-                    choix8: Choix[7].value,
-                    choix9: Choix[8].value,
-                    choix10: Choix[9].value,
-                }
-            };
+                choix: {}
+              };
+              
+              for (let i = 0; i < Choix.length; i++) {
+                newTop.choix[`choix${i+1}`] = Choix[i].value;
+              }
             //On envoie le nouveau top au serveur
             datas(newTop);
  
@@ -82,6 +64,32 @@ function FormTopCreate({ datas }) {
             newBox.splice(result.destination.index, 0, draggedItem);
             setChoix(newBox);
         }
+
+        function deleteChoix(id) {
+            const lengthChoix = Choix.length+1;
+            if (lengthChoix > 2) {
+                const delChoix = [...Choix];
+                const choixIndex = delChoix.findIndex(choix => choix.id === id);
+                delChoix.splice(choixIndex, 1);
+                setChoix(delChoix);
+            }
+            
+            
+        }
+
+        function addChoix() {
+            const lengthChoix = Choix.length+1;
+            if (lengthChoix <= 10) {
+                const newChoix = {
+                    id: `choix${Choix.length + 1}`,
+                    name: `choix${Choix.length + 1}`,
+                    value: "",
+                };
+                const addChoix = [...Choix, newChoix];
+                setChoix(addChoix);
+            }
+
+        }
         
 
    return(
@@ -102,19 +110,28 @@ function FormTopCreate({ datas }) {
                         {Choix.map(({id, name}, index) => 
                         <Draggable key={id} draggableId={id.toString()} index={index}>
                             {(provided) => (
-                            <h1 ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                                 <div className={`box ${name}`}>
                                     <Stack
                                         direction="row"
                                         divider={<Divider orientation="vertical" flexItem />}
                                         spacing={2}
                                     >
-                                        <ClearIcon/>
-                                        <TextField id={id} label="Inscrire le choix" variant="standard" {...register(name)} onChange={handleInputChange}  />
+                                        <ClearIcon onClick={() => deleteChoix(id)}/>
+                                        <Badge color="secondary" badgeContent={index+1} showZero>
+                                        <TextField 
+                                            id={id}
+                                            variant="standard" 
+                                            InputProps={{startAdornment: (<InputAdornment position="start">{index+1}</InputAdornment>),}}
+                                            {...register(name, {required: "Il faut choisir !"})} 
+                                            onChange={handleInputChange}  
+                                        />
+                                        </Badge>
                                         <ClearAllIcon/>
                                     </Stack>
+                                    <p className="error">{errors[name] && errors[name]?.message}</p>
                                 </div>
-                            </h1>
+                            </div>
                             )}
                         </Draggable>
                         )}
@@ -123,7 +140,7 @@ function FormTopCreate({ datas }) {
                     )}
                 </Droppable>
             </DragDropContext>
-            <AddIcon/>
+            <AddIcon onClick={addChoix}/>
           
 
             <Stack direction="row">
