@@ -3,12 +3,8 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import { useForm } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
-import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -43,23 +39,22 @@ function FormChips({chipData, setChipData}) {
   return (
     <>
         <Form onSubmit={handleSubmit(addChip)}>
-          <Stack direction="row" justifyContent="center">
-            <TextField
-              id="standard-basic" 
-              label="Mot clés" 
-              variant="standard"
-              endadornment={
-                <InputAdornment position="end">
-                  <AddIcon/>
-                </InputAdornment>
-              }
-              {...register('chip')}  
-            />
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" type="submit">
+            <div className='mt-4 px-10'>
+                <label htmlFor="first-name" className=" block text-sm text-tertiary-300 font-bold text-left">
+                Mot clés / #
+                </label>
+                <input
+                type="text"
+                name="first-name"
+                id="first-name"
+                autoComplete="given-name"
+                className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
+                {...register('chip')}
+                />
+            </div>
+            <IconButton color="primary" sx={{ p: '10px', display: 'none' }} aria-label="directions" type="submit">
               <AddIcon/>
             </IconButton>
-          </Stack>
         </Form>
 
         <Paper
@@ -77,7 +72,11 @@ function FormChips({chipData, setChipData}) {
           {chipData.map((data) => {
               let icon;
               return (
-                  <ListItem key={data.key}>
+                  <ListItem key={data.key}
+                    sx={{
+                      mb: 5,
+                    }}
+                  >
                       <Chip
                       icon={icon}
                       label={data.label}

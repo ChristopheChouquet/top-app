@@ -1,11 +1,10 @@
-import '../styles/CreateTop.css';
-
 import FormTopCreate from '../Components/FormTopCreate';
 import Header from '../Components/Header';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import Footer from '../Components/Footer';
 
 
 function TopCreate() {
@@ -76,7 +75,9 @@ function TopCreate() {
         <>
             <Header/>
             <FormTopCreate datas={SaveTop} />
+            <Footer/>
         </>
+        
     )
     
 }

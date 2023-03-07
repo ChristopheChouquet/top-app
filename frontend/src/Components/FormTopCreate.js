@@ -1,20 +1,9 @@
 import Form from 'react-bootstrap/Form';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import ClearIcon from '@mui/icons-material/Clear';
-import ClearAllIcon from '@mui/icons-material/ClearAll';
-import AddIcon from '@mui/icons-material/Add';
-import InputAdornment from '@mui/material/InputAdornment';
-import Badge from '@mui/material/Badge';
-
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FormChips from './Formchips';
-
   
 function FormTopCreate({ datas }) {
         //Gestion du Hook form
@@ -102,71 +91,119 @@ function FormTopCreate({ datas }) {
             }
 
         }
-        
 
    return(
         <>
-            <TextField 
-                id="standard-basic" 
-                label="Titre du top" 
-                variant="standard"
-                {...register('titre', {required: "Il faut choisir un titre !"})}  
-            />
-            <p className="error">{errors.titre && errors.titre.message}</p>
+            <h1 className="text-3xl font-bold w-full text-center mt-4">Créer son top</h1>
+            <label htmlFor="Toggle3" className="flex justify-center items-center p-2 rounded-md cursor-pointer dark:text-gray-800 ">
+                <div className='bg-tertiary-300 rounded-3xl px-0 py-2'>
+                <input id="Toggle3" type="checkbox" className="hidden peer" />
+                <span className="px-4 py-2 rounded-3xl dark:bg-primary peer-checked:dark:bg-tertiary-300 text-tertiary-100" >Top simple</span>
+                <span className="px-4 py-2 rounded-3xl dark:bg-tertiary-300 peer-checked:dark:bg-primary text-tertiary-100">Top détaillé</span>
+                </div>
+            </label>
 
-            <FormChips chipData={chipData} setChipData={setChipData}/>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+  
+            
+            <div className='mt-4 px-10'>
+                <label htmlFor="first-name" className="block text-sm text-tertiary-300 font-bold text-left">
+                Titre
+                </label>
+                <input
+                type="text"
+                name="first-name"
+                id="first-name"
+                autoComplete="given-name"
+                className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
+                {...register('titre', {required: "Il faut choisir un titre !"})} 
+                />
+                <p className="error">{errors.titre && errors.titre.message}</p>
+            </div>
+            
 
-                <h2>Classement (possible de 1 à 10)</h2>
+                <FormChips chipData={chipData} setChipData={setChipData}/>
 
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="boxes">
-                        {(provided) => (
-                        <ul ref={provided.innerRef} {...provided.droppableProps}>
-                            {Choix.map(({id, name}, index) => 
-                            <Draggable key={id} draggableId={id.toString()} index={index}>
-                                {(provided) => (
-                                <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                    <div className={`box ${name}`}>
-                                        <Stack
-                                            direction="row"
-                                            divider={<Divider orientation="vertical" flexItem />}
-                                            spacing={2}
-                                        >
-                                            <ClearIcon onClick={() => deleteChoix(id)}/>
-                                            <Badge color="secondary" badgeContent={index+1} showZero>
-                                            <TextField 
+                <p className='block text-sm text-tertiary-300 font-bold text-left mt-4 px-10 mb-6'>Classement (possible de 1 à 10)</p>
+
+
+                <Form onSubmit={handleSubmit(onSubmit)}>
+
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId="boxes">
+                            {(provided) => (
+                            <ul ref={provided.innerRef} {...provided.droppableProps}>
+                                {Choix.map(({id, name}, index) => 
+                                <Draggable key={id} draggableId={id.toString()} index={index}>
+                                    {(provided) => (
+                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                                        <div className={`box ${name} flex items-center justify-center mb-4`}>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="stroke-tertiary-300 w-6 h-6" onClick={() => deleteChoix(id)}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                            <p className='font-bold text-3xl text-primary'>{index+1}</p>
+                                            <div className='px-10'>
+                                                <input
+                                                type="text"
+                                                name="first-name"
                                                 id={id}
-                                                variant="standard" 
-                                                InputProps={{startAdornment: (<InputAdornment position="start">{index+1}</InputAdornment>),}}
+                                                placeholder="Inscrire le choix"
+                                                autoComplete="given-name"
+                                                className="text-tertiary-400 w-full focus:outline-none font-semibold"
                                                 {...register(name, {required: "Il faut choisir !"})} 
-                                                onChange={handleInputChange}  
-                                            />
-                                            </Badge>
-                                            <ClearAllIcon/>
-                                        </Stack>
-                                        <p className="error">{errors[name] && errors[name]?.message}</p>
+                                                onChange={handleInputChange} 
+                                                />
+                                                <p className="error">{errors[name] && errors[name]?.message}</p>
+                                            </div>
+                                            
+                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  viewBox="0 0 21.7 26.6" className="stroke-primary w-6 h-6">
+                                            <g>
+                                                <polygon fill="none" points="10.8,1 1,10.8 20.7,10.8 	"/>
+                                                <polygon fill="none" points="10.8,25.6 20.7,15.9 1,15.9 	"/>
+                                            </g>
+                                            </svg>
+
+                                            
+
+
+                                        </div>
                                     </div>
-                                </div>
+                                    )}
+                                </Draggable>
                                 )}
-                            </Draggable>
+                                {provided.placeholder}
+                            </ul>
                             )}
-                            {provided.placeholder}
-                        </ul>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                        </Droppable>
+                    </DragDropContext>
 
-                <AddIcon onClick={addChoix}/>
+                    <div className='flex justify-end'>
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  viewBox="0 0 48.7 48.7" className="stroke-primary w-8 h-8 mr-5" onClick={addChoix}>
+                            <g>
+                                <path className="fill-primary stroke-primary" d="M10.7,22.2H38c1.2,0,2.1,1,2.1,2.1c0,1.2-1,2.1-2.1,2.1H10.7c-1.2,0-2.1-1-2.1-2.1
+                                    C8.5,23.2,9.5,22.2,10.7,22.2"/>
+                                <path className="fill-primary stroke-primary" d="M22.2,38V10.7c0-1.2,1-2.1,2.1-2.1c1.2,0,2.1,1,2.1,2.1V38c0,1.2-1,2.1-2.1,2.1C23.2,40.2,22.2,39.2,22.2,38"
+                                    />
+                                <path className="stroke-primary fill-none" d="M24.4,0.5c13.2,0,23.9,10.7,23.9,23.9c0,13.2-10.7,23.9-23.9,23.9c-13.2,0-23.9-10.7-23.9-23.9
+                                    C0.5,11.2,11.2,0.5,24.4,0.5z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div className="flex justify-end">
+                        <button type='submit' className='bg-primary text-tertiary-100 rounded-3xl px-6 py-2 m-5'>Poster</button> 
+                    </div>
+                          
+                    
 
-                <Stack direction="row" justifyContent="center">
-                    <Button color='secondary' variant="contained" type="submit" >
-                    Valider
-                    </Button>
-                </Stack>
+
+                </Form>
+
+           
 
 
-            </Form>
+            
+
+            
         </>                        
     )
     
