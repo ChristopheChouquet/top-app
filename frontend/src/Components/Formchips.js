@@ -40,14 +40,13 @@ function FormChips({chipData, setChipData}) {
     <>
         <Form onSubmit={handleSubmit(addChip)}>
             <div className='mt-4 px-10'>
-                <label htmlFor="first-name" className=" block text-sm text-tertiary-300 font-bold text-left">
+                <label htmlFor="chip" className="block text-sm text-tertiary-300 font-bold text-left">
                 Mot clés / #
                 </label>
                 <input
                 type="text"
-                name="first-name"
-                id="first-name"
-                autoComplete="given-name"
+                name="chip"
+                id="chip"
                 className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
                 {...register('chip')}
                 />

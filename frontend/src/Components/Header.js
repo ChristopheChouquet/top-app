@@ -38,7 +38,7 @@ function Header() {
 
   return (
 
-    <header className='bg-secondary p-2.5'>
+    <header className='bg-secondary p-2.5 fixed top-0 w-screen'>
             <div className='grid-cols-3 flex justify-between'>
                 <div>
                     <Menu as="div" className="relative inline-block text-left">

@@ -3,8 +3,6 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import FormloginCreate from '../Components/FormloginCreate';
-import Header from '../Components/Header';
-import Footer from '../Components/Footer';
 
 function LoginCreate() {
 
@@ -52,13 +50,11 @@ function LoginCreate() {
 
   return (
     <>
-      <Header/>
       <FormloginCreate 
       datas={AddUser}
       isExistAccount={isExistAccount}
       MsgCompte={MsgCompte}
       />
-      <Footer/>
     </>
     
   );

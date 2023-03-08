@@ -6,9 +6,9 @@ import Loader from "./loader";
 
 function Home() {
 
-    // initialisation de l'objet navigate
+    // Stockage des tops
         const [top, setTop] = useState([]); 
-
+    //Chargement des datas
         const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ function Home() {
             <div>
                 <Header/>
             
-                    <div id="home" className="flex flex-wrap justify-center mb-16">
+                    <div id="home" className="flex flex-wrap justify-center mb-16 mt-16">
                     {top.map(top => (
                         <div key={top._id} className="w-4/5 border-2 border-secondary flex flex-wrap p-2.5 my-2 rounded-lg text-left justify-start">
                             <div>
@@ -115,7 +115,7 @@ function Home() {
 
                             </div> 
                         </div>
-                        ))}
+                    ))}
                     </div>
                 <Footer/>
             </div>

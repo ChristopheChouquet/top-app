@@ -12,6 +12,7 @@ import User from "../models/UserModel.js";
  
 export const getUsers = async (req, res) => {
     try {
+        console.log(res);
         const users = await User.find();
         res.json(users);
     } catch (error) {
@@ -93,8 +94,7 @@ export const login = (req, res, next) => {
 
 //On créé le middleware permettant de se deco
 export const logout = (req, res, next) => {
-    
-    
+
     res.clearCookie('token');
     res.status(200).json({ message: 'Déconnecté avec succès' });
 };

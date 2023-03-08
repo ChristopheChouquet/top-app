@@ -7,6 +7,7 @@ import Login from './Pages/login';
 import TopCreate from './Pages/topCreate';
 import Home from './Pages/home'; 
 import Header from './Components/Header';
+import Recherche from './Pages/recherche';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/header' element={<Header/>}/>
           <Route path='/topcreate' element={<TopCreate/>}/>
+          <Route path='/recherche' element={<Recherche/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/logincreate' element={<LoginCreate/>}/>
           <Route path='/' element={<Home />}/>
