@@ -25,6 +25,15 @@ function Recherche() {
         }).catch((error) => {  
             console.error(error);
         }); 
+
+        //Gestion des icons du footer
+        const footerIconSelector = document.querySelector('#footer > div > div > a:nth-child(2)');
+        const selectAllSVGElement = footerIconSelector.querySelectorAll('*');
+        selectAllSVGElement.forEach((element) => {
+            element.classList.remove('stroke-tertiary-300');
+            element.classList.add('stroke-primary');
+        });
+
     }, []);
 
 

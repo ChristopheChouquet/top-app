@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
-import { useNavigate    } from "react-router-dom";
+import { NavLink, useNavigate    } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -95,7 +95,7 @@ function Header() {
                     </Menu>
                 </div>
                 <div>
-                    <a href="/">
+                    <NavLink to='/'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="23px" viewBox="0 0 53.8 23" className="fill-primary w-8 h-8">
                             <g>
                                 <path d="M0,20.9c0,0.7,0.2,1.2,0.6,1.6s1,0.5,1.7,0.5h49.2c0.7,0,1.3-0.2,1.7-0.5c0.4-0.4,0.6-0.9,0.6-1.6
@@ -106,7 +106,7 @@ function Header() {
                                     c0-0.7-0.2-1.2-0.6-1.6c-0.4-0.4-1-0.5-1.7-0.5H12.3c-0.7,0-1.3,0.2-1.7,0.6C10.2,10.3,10,10.8,10,11.5"/>
                             </g>
                         </svg>
-                    </a>
+                    </NavLink>
                 </div>
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28.5 24.6" className="w-6 h-6">
                     <g>
