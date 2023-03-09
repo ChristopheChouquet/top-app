@@ -35,25 +35,23 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
 
 
 
-
-
-
-
-
     //Usetate des chips (mot clés)
     const [chipDataCreate, setChipDataCreate] = useState([]);
     const [inputValueChip, setInputValueChip] = useState('');
 
     const addChiptest = function () {
-        const newChip = {
-            key : `chip${chipDataCreate.length+1}`,
-            valeur : inputValueChip
+        if (inputValueChip[0].valeur !== '' && chipDataCreate.length < 5) {
+
+            const newChip = {
+                key : `chip${chipDataCreate.length+1}`,
+                valeur : inputValueChip
+            }
+            
+            const copyDataChip = [...chipDataCreate, newChip ];
+            setChipDataCreate(copyDataChip);
+            setInputValueChip('');
+            console.log('chipDataCreate', copyDataChip);
         }
-        
-        const copyDataChip = [...chipDataCreate, newChip ];
-        setChipDataCreate(copyDataChip);
-        setInputValueChip('');
-        console.log('chipDataCreate', copyDataChip);
         
     }
 

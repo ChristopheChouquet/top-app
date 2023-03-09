@@ -7,6 +7,10 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
  
 const User = mongoose.Schema({
+    pseudo:{
+        type: String,
+        required: true
+    },
     tagName:{
         type: String,
         required: true,
@@ -28,10 +32,6 @@ const User = mongoose.Schema({
         chip5: {
             type: String
         }
-    },
-    pseudo:{
-        type: String,
-        required: true
     },
     email:{
         type: String,

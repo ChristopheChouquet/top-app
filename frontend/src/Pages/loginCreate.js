@@ -23,13 +23,7 @@ function LoginCreate() {
 
   //Ajout des nouveuax users dans la base de donnée
     function AddUser(data) {
-
-      // Récupération des données du formulaire
-      /* const newUserAccount = {
-        email: data.email,
-        password: data.password
-      }; */
-
+      console.log(data);
       // Enregistrement du nouvel user account
         axios({
           method: 'post',

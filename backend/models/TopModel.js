@@ -56,7 +56,7 @@ const Top = new mongoose.Schema({
         },
         choix10: {
             type: String
-        },
+        }
     },
     date: {
         type: Date,
