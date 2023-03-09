@@ -7,6 +7,32 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
  
 const User = mongoose.Schema({
+    tagName:{
+        type: String,
+        required: true,
+        unique: true
+    },
+    motCles: {
+        chip1: {
+            type: String
+        },
+        chip2: {
+            type: String
+        },
+        chip3: {
+            type: String
+        },
+        chip4: {
+            type: String
+        },
+        chip5: {
+            type: String
+        }
+    },
+    pseudo:{
+        type: String,
+        required: true
+    },
     email:{
         type: String,
         required: true,

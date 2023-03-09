@@ -93,7 +93,7 @@ function FormTopCreate({ datas }) {
         }
 
    return(
-        <div id="createTop" className='mb-16 mt-16'>
+        <div id="createTop" className='p-10'>
 
             <h1 className="text-3xl font-bold w-full text-center mt-4">Créer son top</h1>
             <label htmlFor="Toggle3" className="flex justify-center items-center p-2 rounded-md cursor-pointer dark:text-gray-800 ">
@@ -105,7 +105,7 @@ function FormTopCreate({ datas }) {
             </label>
 
   
-            <div className='mt-4 px-10'>
+            <div className='mt-4'>
                 <label htmlFor="titre" className="block text-sm text-tertiary-300 font-bold text-left">
                 Titre
                 </label>
@@ -121,7 +121,7 @@ function FormTopCreate({ datas }) {
 
             <FormChips chipData={chipData} setChipData={setChipData}/>
 
-            <p className='block text-sm text-tertiary-300 font-bold text-left mt-4 px-10 mb-6'>Classement (possible de 1 à 10)</p>
+            <p className='block text-sm text-tertiary-300 font-bold text-left mt-4 mb-6'>Classement (possible de 1 à 10)</p>
 
 
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -134,13 +134,13 @@ function FormTopCreate({ datas }) {
                             <Draggable key={id} draggableId={id.toString()} index={index}>
                                 {(provided) => (
                                 <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                    <div className={`box ${name} flex items-center justify-center mb-4`}>
+                                    <div className={`box ${name} flex items-center justify-between mb-4`}>
 
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="stroke-tertiary-300 w-6 h-6" onClick={() => deleteChoix(id)}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                         <p className='font-bold text-3xl text-primary'>{index+1}</p>
-                                        <div className='px-10'>
+                                        <div className=''>
                                             <input
                                             type="text"
                                             name="name"
@@ -160,9 +160,6 @@ function FormTopCreate({ datas }) {
                                         </g>
                                         </svg>
 
-                                        
-
-
                                     </div>
                                 </div>
                                 )}
@@ -175,7 +172,7 @@ function FormTopCreate({ datas }) {
                 </DragDropContext>
 
                 <div className='flex justify-end'>
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  viewBox="0 0 48.7 48.7" className="stroke-primary w-8 h-8 mr-5" onClick={addChoix}>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  viewBox="0 0 48.7 48.7" className="stroke-primary w-8 h-8" onClick={addChoix}>
                         <g>
                             <path className="fill-primary stroke-primary" d="M10.7,22.2H38c1.2,0,2.1,1,2.1,2.1c0,1.2-1,2.1-2.1,2.1H10.7c-1.2,0-2.1-1-2.1-2.1
                                 C8.5,23.2,9.5,22.2,10.7,22.2"/>
@@ -187,7 +184,7 @@ function FormTopCreate({ datas }) {
                     </svg>
                 </div>
                 <div className="flex justify-end">
-                    <button type='submit' className='bg-primary text-tertiary-100 rounded-3xl px-6 py-2 m-5'>Poster</button> 
+                    <button type='submit' className='bg-primary text-tertiary-100 rounded-3xl px-6 py-2 mt-5'>Poster</button> 
                 </div>
                         
                 

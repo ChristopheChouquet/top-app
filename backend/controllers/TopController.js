@@ -28,7 +28,7 @@ export const saveTop = (req, res, next) => {
         motCle: req.body.motCle,
         choix: {}
     });
-    console.log(req);
+    
     //On aprcours tous les choix
     for (let i = 1; i <= 10; i++) {
         newTop.choix[`choix${i}`] = req.body.choix[`choix${i}`];

@@ -44,7 +44,7 @@ function Recherche() {
                 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className='mt-5 flex flex-col px-20'>
-                        <div className="relative mt-2 rounded-md">
+                        <div className="relative mt-2 rounded-md z-[-1]">
                             <input 
                                 {...register("recherche")} 
                                 type="text"
@@ -80,9 +80,13 @@ function Recherche() {
                                         alt=""
                                     />
                                     <div>
-                                        <p className="text-tertiary-400 font-bold">Pseudo</p>
-                                        <p className="text-tertiary-400 font-semi">@login</p>
-                                        <p className="text-tertiary-300 text-sm font-bold">@mot clés</p>
+                                        <p className="text-tertiary-400 font-bold">{user.pseudo}</p>
+                                        <p className="text-tertiary-400 font-semi">{user.tagName}</p>
+                                        <div className="flex flex-wrap">
+                                            {Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
+                                                <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

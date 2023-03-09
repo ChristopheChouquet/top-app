@@ -164,7 +164,9 @@ function Home() {
                                 </div>
                             </div>
                             {Array(10).fill(null).map((_, i) => top.choix[`choix${i+1}`] && (
-                                <p className="font-medium" key={i}><span className="font-bold text-primary">{i+1} &#183;</span> {top.choix[`choix${i+1}`]}</p>
+                                <p className="font-medium" key={i}>
+                                    {top.choix[`choix${i+1}`]}
+                                </p>
                             ))}
                         </div>
                         <div className='p-2.5 flex w-5/6 justify-around'>

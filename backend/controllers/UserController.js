@@ -26,8 +26,11 @@ export const saveUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
+            pseudo: req.body.pseudo,
+            tagName: req.body.tagName,
             email: req.body.email,
-            password: hash
+            password: hash,
+            motCles: req.body.motCles
         });
         user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur Créé !'}))

@@ -25,16 +25,16 @@ function LoginCreate() {
     function AddUser(data) {
 
       // Récupération des données du formulaire
-      const newUserAccount = {
+      /* const newUserAccount = {
         email: data.email,
         password: data.password
-      };
+      }; */
 
       // Enregistrement du nouvel user account
         axios({
           method: 'post',
           url: 'http://localhost:5000/signup',
-          data: newUserAccount
+          data: data
         }).then((response) => {
           setisExistAccount(false)
           Toast.fire({

@@ -39,7 +39,7 @@ function FormChips({chipData, setChipData}) {
   return (
     <>
         <Form onSubmit={handleSubmit(addChip)}>
-            <div className='mt-4 px-10'>
+            <div className='mt-4'>
                 <label htmlFor="chip" className="block text-sm text-tertiary-300 font-bold text-left">
                 Mot clés / #
                 </label>

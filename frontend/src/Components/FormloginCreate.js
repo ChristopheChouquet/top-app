@@ -6,6 +6,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
 
     //Mise en place de la gestion du form avec useForm
         const {register, handleSubmit, formState: {errors}} = useForm();
+        
 
     //Gestion du form
         const [values, setValues] = useState({
@@ -32,32 +33,133 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
           };
 
 
+
+
+
+
+
+
+
+    //Usetate des chips (mot clés)
+    const [chipDataCreate, setChipDataCreate] = useState([]);
+    const [inputValueChip, setInputValueChip] = useState('');
+
+    const addChiptest = function () {
+        const newChip = {
+            key : `chip${chipDataCreate.length+1}`,
+            valeur : inputValueChip
+        }
+        
+        const copyDataChip = [...chipDataCreate, newChip ];
+        setChipDataCreate(copyDataChip);
+        setInputValueChip('');
+        console.log('chipDataCreate', copyDataChip);
+        
+    }
+
+    //Suppression des chips
+    const handleDelete = (chipToDelete) => () => {
+        setChipDataCreate((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    };
+
+
+    const onSubmit = function(data) {
+        console.log('datas', data);
+        console.log('chipDataCreate', chipDataCreate);
+
+        const newUserAccount = {
+            pseudo: data.pseudo,
+            tagName : data.tagName,
+            email: data.email,
+            password: data.password,
+            motCles: {}
+        };
+
+        
+        //On parcours tous les mot clés et on récupére leur valeur
+        for (let i = 0; i < chipDataCreate.length; i++) {
+            newUserAccount.motCles[`chip${i+1}`] = chipDataCreate[i].valeur;
+        }
+        console.log(newUserAccount);
+        //On envoie le nouveau top au serveur
+        datas(newUserAccount);
+        
+    }
+
+
+
+
+
+    
     return(
         <>
+
             <h2 className='text-left font-bold text-2xl leading-5 m-10'>S'inscrire</h2>
             <div className='flex flex-col items-center justify-center p-10'>
             
 
-                <form onSubmit={handleSubmit(datas)} className='w-full'>  
+                <form onSubmit={handleSubmit(onSubmit)} className='w-full'>  
 
-                    {/* UPLOAD UN FICHIER */}
-                    {/* <div class="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
-                                <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only"/>
-                                </label>
-                                <p class="pl-1">or drag and drop</p>
+                    <div className='mt-5'>
+                        <label htmlFor="pseudo" className="block text-sm text-tertiary-300 font-bold text-left">
+                            Pseudo
+                        </label>
+                        <input
+                            type="text"
+                            name="pseudo"
+                            id="pseudo"
+                            autoComplete='off'
+                            className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
+                            {...register("pseudo", { required: "Il faut remplir le pseudo" })} 
+                        />
+                        <p className="text-red-500">{errors.pseudo && errors.pseudo.message}</p>
+                    </div>
+
+                    <div className='mt-5'>
+                        <label htmlFor="tagName" className="block text-sm text-tertiary-300 font-bold text-left">
+                            @
+                        </label>
+                        <input
+                            type="text"
+                            name="tagName"
+                            id="tagName"
+                            autoComplete='off'
+                            className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
+                            {...register("tagName", {required: "Il faut remplir le tag"})} 
+                        />
+                        <p className="text-red-500">{errors.tagName && errors.tagName.message}</p>
+                    </div>
+
+
+                    <div className='mt-5'>
+                        <label htmlFor="motCles" className="block text-sm text-tertiary-300 font-bold text-left">Centre d'intérêt</label>
+                        <div className="relative mt-2 rounded-md shadow-sm">
+                            <input 
+                                type="text"
+                                name="motCles" 
+                                id="motCles"
+                                value={inputValueChip}
+                                onChange={(e) => setInputValueChip(e.target.value)}
+                                autoComplete='off' 
+                                className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
+                            />
+                            <div className="absolute inset-y-0 right-0 flex items-center">
+                                <button 
+                                type='button'
+                                    onClick={addChiptest}
+                                >+
+                                </button>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                         </div>
-                    </div> */}
+                    </div>
+                    {chipDataCreate.map(chip => (
+                        <p key={chip.key}>
+                            {chip.valeur}
+                            <button type="button" className='bg-primary' onClick={chip.valeur && handleDelete(chip)}>delete</button>
+                        </p>
+                    ))}
 
-                    <div className='mt-16'>
+                    <div className='mt-5'>
                         <label htmlFor="email" className="block text-sm text-tertiary-300 font-bold text-left">
                             Email
                         </label>
@@ -75,10 +177,10 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
                                 }
                             })} 
                         />
-                        <p className="error">{errors.email && errors.email.message}</p>
+                        <p className="text-red-500">{errors.email && errors.email.message}</p>
                     </div>
 
-                    <div className='mt-10'>
+                    <div className='mt-5'>
                         <label htmlFor="password" className="block text-sm text-tertiary-300 font-bold text-left">Password</label>
                         <div className="relative mt-2 rounded-md shadow-sm">
                             <input 
@@ -118,7 +220,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
                                 </button>
                             </div>
                         </div>
-                        <p className="error">{errors.password && errors.password.message}</p>
+                        <p className="text-red-500">{errors.password && errors.password.message}</p>
                         {isExistAccount ? <p className="error">{MsgCompte}</p> : <Navigate to="/login" />}
                     </div>
 
