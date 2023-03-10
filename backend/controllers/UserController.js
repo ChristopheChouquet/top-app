@@ -19,7 +19,21 @@ export const getUsers = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 }
+
+export const getUserProfil = async (req, res) => {
+    //On récupère le token du header
+    const tokenHeader = req.headers.authorization.split(' ')[1];
+    //On le décode
+    const decodedToken = jwt.verify(tokenHeader, 'RANDOM_TOKEN_SECRET_kfjhfsdjfhsdhfdsj6767232300YYHDBD');
+    //On en extrait le userId
+    const userId = decodedToken.userId;
+
+    User.findOne({ _id: userId })
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(400).json({ error }));
+}
  
+
 
 export const saveUser = (req, res, next) => {
     //On hash le mot de passe recu, 10 correspond au nombre d'itération, cela rend plus sécure mais pas trop lent 

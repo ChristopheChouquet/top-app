@@ -1,4 +1,20 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Loader() {
+
+    // initialisation de l'objet navigate
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            navigate('/');
+        }, 2000);
+            
+    }, []);
+
+
     return(
         <div className="bg-primary h-screen flex justify-center p-16">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 351.2 124">

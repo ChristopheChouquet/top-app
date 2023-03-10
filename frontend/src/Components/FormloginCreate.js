@@ -151,10 +151,13 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
                         </div>
                     </div>
                     {chipDataCreate.map(chip => (
-                        <p key={chip.key}>
-                            {chip.valeur}
-                            <button type="button" className='bg-primary' onClick={chip.valeur && handleDelete(chip)}>delete</button>
-                        </p>
+                        <div key={chip.key} className="bg-secondary rounded-full px-6 py-2 mt-2 inline-flex justify-between">
+                            <span className='text-primary font-bold'>{chip.valeur}</span>&nbsp;&nbsp;
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-6 h-6 stroke-tertiary-300" onClick={handleDelete(chip)}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+
+                        </div>
                     ))}
 
                     <div className='mt-5'>
@@ -223,7 +226,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
                     </div>
 
                     <div className='mt-8 flex flex-col items-center'>
-                        <button type="submit" id="buttonSubmit" className="bg-primary text-tertiary-100 rounded-3xl px-6 py-2 mb-5 w-full">
+                        <button type="submit" id="buttonSubmit" className="bg-primary text-tertiary-100 rounded-full px-6 py-2 mb-5 w-full">
                         ENREGISTRER
                         </button>
                         <p className='text-sm font-bold'><NavLink to='/login'><button type="button" id="buttonRetourSubmit">RETOUR</button></NavLink></p>

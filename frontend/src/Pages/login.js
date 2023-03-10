@@ -46,7 +46,7 @@ function Login() {
 
             setUserAccountisOK(true);
             setMsgCompte('');
-            navigate('/');
+            navigate('/loader');
         }).catch(() => { 
             setUserAccountisOK(false);
             setMsgCompte('Aucun compte associé');
