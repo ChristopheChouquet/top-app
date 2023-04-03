@@ -6,7 +6,7 @@ import {
  
 const router = express.Router();
  
-router.get('/tops', getAllTops);
+router.get('/tops', getAllTops)
 router.post('/tops', saveTop);
  
 export default router;

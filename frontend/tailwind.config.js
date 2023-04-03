@@ -14,6 +14,11 @@ module.exports = {
         }
       }
     },
+    fontFamily: {
+      'primary': ['Arial', 'sans-serif'],
+      'myriad': ['Myriad', 'sans-serif'],
+      'nunito': ['Nunito Sans', 'sans-serif'],
+    }
   },
   plugins: [],
 }

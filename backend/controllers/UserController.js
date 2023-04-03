@@ -20,6 +20,14 @@ export const getUsers = async (req, res) => {
     }
 }
 
+export const getUsersById = (req, res, next) => {
+    const userId = req.params.userId;
+
+    User.find({ _id: userId })
+    .then(tops => res.status(200).json(tops))
+    .catch(error => res.status(400).json({ error }));
+};
+
 export const getUserProfil = async (req, res) => {
     //On récupère le token du header
     const tokenHeader = req.headers.authorization.split(' ')[1];

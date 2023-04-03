@@ -10,8 +10,7 @@ export const getAllTops = (req, res, next) => {
     Top.find()
     .then(tops => res.status(200).json(tops))
     .catch(error => res.status(400).json({ error }));
-  };
-
+};
 
 export const saveTop = (req, res, next) => {
     
