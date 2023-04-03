@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function Footer() {
     return(
-        <footer id="footer" className='bg-tertiary-100 fixed bottom-0 w-screen'>
+        <footer id="footer" className='bg-tertiary-100 fixed bottom-0 w-screen mx-auto max-w-xl'>
             <div className='p-2.5 pr-0 flex items-center'>
 
               <div className="bg-tertiary-200 rounded-2xl flex justify-between items-center w-4/5 py-2.5 px-8">

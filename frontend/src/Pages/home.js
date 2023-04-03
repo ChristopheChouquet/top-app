@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import Loader from "./loader";
 
 function Home() {
 
@@ -28,11 +27,40 @@ function Home() {
                   date: dateFormatee,
                 };
             });
+
+            /* const newTopfull = response.data.map((item) => {
+                axios({
+                    method: 'get',
+                    url: 'http://localhost:5000/recherche'
+                }).then((response) => {
+                    console.log(response.data);
+                }).catch((error) => {  
+                    console.error(error);
+                });
+
+                return {
+                    ...item, lol:'caca'
+                  };
+            }); */
             setTop(newTop);
             setLoading(false); // fin du chargement des données après 5 secondes
+
+
+            /* axios({
+                method: 'get',
+                url: 'http://localhost:5000/recherche'
+            }).then((response) => {
+                setUser(response.data);
+            }).catch((error) => {  
+                console.error(error);
+            }); */
+
+
+            
         }).catch((error) => { 
             console.error(error);
         }); 
+        console.log();
 
         //Gestion des icons du footer
             const footerIconSelector = document.querySelector('#footer > div > div > a > *');

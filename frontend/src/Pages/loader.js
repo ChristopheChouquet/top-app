@@ -12,7 +12,7 @@ function Loader() {
             navigate('/');
         }, 2000);
             
-    }, []);
+    }, [navigate]);
 
 
     return(

@@ -1,4 +1,5 @@
 import './styles/output.css';
+import './styles/globalCSS.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ import FavDay from './Pages/favDay';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App mx-auto max-w-xl bg-tertiary-100">
       <BrowserRouter>
         <Routes>
           <Route path='/topcreate' element={<TopCreate/>}/>
