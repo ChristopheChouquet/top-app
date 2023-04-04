@@ -113,6 +113,7 @@ function FormTopCreate({ datas }) {
                 type="text"
                 name="titre"
                 id="titre"
+                autoComplete='off'
                 className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
                 {...register('titre', {required: "Il faut choisir un titre !"})} 
                 />

@@ -47,6 +47,7 @@ function FormChips({chipData, setChipData}) {
                 type="text"
                 name="chip"
                 id="chip"
+                autoComplete='off'
                 className="text-primary border-b border-tertiary-300 w-full focus:outline-none font-bold"
                 {...register('chip')}
                 />

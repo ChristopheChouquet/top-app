@@ -16,7 +16,7 @@ import FavDay from './Pages/favDay';
 
 function App() {
   return (
-    <div className="App mx-auto max-w-xl bg-tertiary-100">
+    <div className="App mx-auto max-w-xl bg-tertiary-100 h-screen">
       <BrowserRouter>
         <Routes>
           <Route path='/topcreate' element={<TopCreate/>}/>
