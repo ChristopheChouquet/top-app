@@ -1,12 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../Components/Footer";
 import FormRecherche from "../Components/FormRecherche";
 import Header from "../Components/Header";
 
+import { UserContext } from "../UserContext";
+
+
 function Recherche() {
     // Stockage des tops
-        const [user, setUser] = useState([]); 
+    const [user, setUser] = useState([]); 
+    // On récupère les données de l'utilisateur connecté
+    const { userDonne } = useContext(UserContext);
+    
 
 
     useEffect(() => {
@@ -27,22 +33,34 @@ function Recherche() {
             element.classList.remove('stroke-tertiary-300');
             element.classList.add('stroke-primary');
         });
+        console.log('test', userDonne);
 
-    }, []);
+    }, [userDonne]);
+
 
 
     function dataRecherche(dataRecherche) {
         console.log(dataRecherche);
         
+        
+        
     }
+
+    function abonnement(etat) {
+        console.log(etat.target.checked)
+    }
+
+
+
 
 
     return(
         <>
-            <Header/>
+            <Header userDonne={userDonne}/>
             <div id="recherche" className="mb-16 mt-16">
                 
                 <FormRecherche dataRecherche={dataRecherche}/>
+                <p>Utilisateur connecté : {userDonne && userDonne.pseudo}</p>
 
                 {user.map(user => (
                     <div key={user._id}>
@@ -64,8 +82,13 @@ function Recherche() {
                                     </div>
                                 </div>
                             </div>
-                            <label htmlFor="abonne" className="flex justify-center items-center p-2 rounded-md cursor-pointer">
-                                <input id="abonne" type="checkbox" className="hidden peer" />
+                            <label htmlFor={`abonne_${user._id}`} className="flex justify-center items-center p-2 rounded-md cursor-pointer">
+                                <input 
+                                    id={`abonne_${user._id}`} 
+                                    type="checkbox" 
+                                    className="hidden peer"
+                                    onChange={(event) => abonnement(event)} 
+                                />
                                 <span className="font-bold border border-secondary px-4 py-2 rounded-3xl dark:bg-tertiary-100 peer-checked:dark:bg-secondary text-primary" >
                                     S'ABONNER
                                 </span>

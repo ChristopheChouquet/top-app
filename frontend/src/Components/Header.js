@@ -7,7 +7,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function Header() {
+function Header({userDonne}) {
 
     // initialisation de l'objet navigate
     const navigate = useNavigate(); 
@@ -71,7 +71,7 @@ function Header() {
                                         'block px-4 py-2 text-sm'
                                     )}
                                     >
-                                    Profil
+                                    Profil de {userDonne.pseudo}
                                     </a>
                                 )}
                                 </Menu.Item>

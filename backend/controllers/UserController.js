@@ -12,7 +12,6 @@ import User from "../models/UserModel.js";
  
 export const getUsers = async (req, res) => {
     try {
-        console.log(res);
         const users = await User.find();
         res.json(users);
     } catch (error) {
@@ -104,8 +103,12 @@ export const login = (req, res, next) => {
                     res.set('Authorization', `Bearer ${token}`);
                     //On revoie l'id et le token dans la réponse
                     res.status(200).json({
-                        userId: user._id, 
-                        token: token
+                        userId: user._id,
+                        pseudo: user.pseudo, 
+                        tagName: user.tagName, 
+                        email: user.email,
+                        token: token,
+                        
                     });
                     
                 }
