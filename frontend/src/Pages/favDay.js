@@ -28,8 +28,8 @@ function FavDay() {
     return(
         <>
             <Header/>
-            <div className="bg-primary h-screen w-screen">
-                <h1 className="pt-20">FAV DAY</h1>
+            <div className="bg-primary h-screen">
+                <h1 className="pt-20 text-center text-tertiary-100 font-black">FAV DAY EN COURS</h1>
             </div>
             <Footer/>
         </>

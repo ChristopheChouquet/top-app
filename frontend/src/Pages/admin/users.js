@@ -87,9 +87,11 @@ function UsersAdmin() {
                                     <p className="text-primary font-bold">ID : {user._id}</p>
                                     <p className="text-tertiary-300 font-semi">@{user.tagName}</p>
                                     <div className="flex flex-wrap">
-                                        {Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
-                                            <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
-                                        ))}
+                                        {user.motCles && (
+                                            Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
+                                                <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
+                                            ))
+                                        )}  
                                     </div>
                                 </div>
                             </div>

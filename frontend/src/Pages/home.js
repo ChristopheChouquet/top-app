@@ -64,7 +64,7 @@ function Home() {
                     </svg>
                 ) : (
                 <div>
-                    <div id="home" className="flex flex-wrap justify-center mb-16 mt-12">
+                    <div id="home" className="flex flex-wrap justify-center mb-16 pt-20">
                     {top.map(top => (
                         
                         <div key={top._id} className="w-4/5 border-2 border-secondary flex flex-wrap p-2.5 my-2 rounded-lg text-left justify-start">
