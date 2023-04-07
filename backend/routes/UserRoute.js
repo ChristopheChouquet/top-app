@@ -4,6 +4,8 @@ import {
     getUsersById,
     getUserProfil,
     saveUser,
+    addUserAbo,
+    delUserAbo,
     login,
     logout,
 } from "../controllers/UserController.js";
@@ -14,6 +16,8 @@ router.get('/recherche', getUsers);
 router.get('/user/:userId', getUsersById);
 router.get('/profil', getUserProfil);
 router.post('/signup', saveUser);
+router.post('/addUserAbo', addUserAbo);
+router.post('/delUserAbo', delUserAbo);
 router.post('/login', login );
 router.post('/logout', logout);
 

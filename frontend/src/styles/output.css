@@ -739,6 +739,10 @@ video {
   height: 100vh;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-1\/5 {
   width: 20%;
 }
@@ -1045,6 +1049,10 @@ video {
 
 .pr-0 {
   padding-right: 0px;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
 }
 
 .pt-20 {

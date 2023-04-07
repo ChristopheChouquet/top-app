@@ -9,6 +9,18 @@ import jwt  from 'jsonwebtoken';
 
 //Importation du model requis pour les nouveaux
 import User from "../models/UserModel.js";
+
+//Fonction pour éviter les que les abonnements dans la BDD ne soit unique
+/* User.collection.dropIndex({ abonnement: 1 }, (err, result) => {
+    if (err) {
+      console.log('Erreur lors de la suppression de l\'index unique : ', err);
+    } else {
+      console.log('Index unique supprimé avec succès : ', result);
+    }
+  }); */
+
+
+
  
 export const getUsers = async (req, res) => {
     try {
@@ -65,9 +77,30 @@ export const updateUser = async (req, res) => {
         const updateduser = await User.updateOne({_id:req.params.id}, {$set: req.body});
         res.status(200).json(updateduser);
     } catch (error) {
-        res.status(400).json({message: error.message});
+        res.status(400).json({message: error.message}); 
     }
 }
+
+
+export const addUserAbo = (req, res, next) => {
+    const { UserCurrent, UserAbo } = req.body;
+    User.findById(UserCurrent)
+        .then(user => {
+            user.abonnement.push(UserAbo);
+            return user.save();
+        })
+        .then(() => res.status(200).json({ message: "Abonnement mis à jour avec succès" }))
+        .catch(error => res.status(400).json({ error }));
+
+};
+
+export const delUserAbo = (req, res, next) => {
+    const { UserCurrent, UserAbo } = req.body;
+    User.updateOne({ _id: UserCurrent }, { $pull: { abonnement: UserAbo }})
+        .then(() => res.status(200).json({ message: "Abonnement supprimé avec succès" }))
+        .catch(error => res.status(400).json({ error }));
+};
+
  
 export const deleteUser = async (req, res) => {
     try {

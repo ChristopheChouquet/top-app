@@ -49,7 +49,7 @@ function Login() {
 
             //Je mets mon UserContext à jour avec les donnée de l'utilisateur connecté
             setUserDonne(response.data);
-            //Je lets également ces donnée dans le localStorage en cas de rafraichissement de la page 
+            //Je mets également ces donnée dans le localStorage en cas de rafraichissement de la page 
             localStorage.setItem('userData', JSON.stringify(response.data));
 
 
@@ -64,9 +64,9 @@ function Login() {
 
     }
 
-    useEffect(() => {
+    /* useEffect(() => {
       console.log('mon usercontext', userDonne);
-    }, [userDonne]);
+    }, [userDonne]); */
 
 
   return (

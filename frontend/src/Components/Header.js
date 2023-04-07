@@ -71,7 +71,7 @@ function Header({userDonne}) {
                                         'block px-4 py-2 text-sm'
                                     )}
                                     >
-                                    Profil de {userDonne.pseudo}
+                                    Profil
                                     </a>
                                 )}
                                 </Menu.Item>

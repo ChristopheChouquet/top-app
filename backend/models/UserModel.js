@@ -42,6 +42,10 @@ const User = mongoose.Schema({
         type: String,
         required: true
     },
+    abonnement: [{
+        type: String,
+        default: null
+    }],
     date: {
         type: Date,
         default: Date.now

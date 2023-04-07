@@ -92,7 +92,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
     return(
         <>
 
-            <h2 className='text-left font-bold text-2xl leading-5 m-10'>S'inscrire</h2>
+            <h2 className='text-left font-bold text-2xl leading-5 p-10'>S'inscrire</h2>
             <div className='flex flex-col items-center justify-center p-10'>
             
 

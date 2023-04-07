@@ -17,7 +17,7 @@ import { UserProvider } from './UserContext';
 
 function App() {
   return (
-    <div className="App mx-auto max-w-xl bg-tertiary-100 h-screen">
+    <div className="App mx-auto max-w-xl bg-tertiary-100 h-auto">
       <UserProvider>
         <BrowserRouter>
           <Routes>
