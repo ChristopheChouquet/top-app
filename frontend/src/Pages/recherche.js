@@ -177,7 +177,7 @@ function Recherche() {
                                     />
                                     <div>
                                         <p className="text-tertiary-400 font-bold">{user.pseudo}</p>
-                                        <p className="text-tertiary-400 font-semi">{user.tagName}</p>
+                                        <p className="text-tertiary-400 font-semi">@{user.tagName}</p>
                                         <div className="flex flex-wrap">
                                             {/* //Affichage des mot clés s'ils existent */}
                                             {user.motCles && (
