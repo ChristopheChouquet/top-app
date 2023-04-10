@@ -2,8 +2,27 @@
 import { useEffect } from "react";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
+import { useNavigate } from "react-router-dom";
 
 function FavDay() {
+
+    // initialisation de l'objet navigate
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+        //On récupère le cookie
+            const cookie = document.cookie;
+        // Recherche du token d'authentification dans le cookie
+            const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
+        // Extrait la valeur du token d'authentification
+            const tokenValue = token ? token.split('=')[1] : null;
+            var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
+            !verifAuth && navigate('/login');
+            
+    // eslint-disable-next-line
+    }, []); 
+
+
     useEffect(() => {
 
         /* axios({
@@ -13,15 +32,7 @@ function FavDay() {
             setUser(response.data);
         }).catch((error) => {  
             console.error(error);
-        });  */
-
-        //Gestion des icons du footer
-        const footerIconSelector = document.querySelector('#footer > div > div > a:nth-child(3)');
-        const selectAllSVGElement = footerIconSelector.querySelectorAll('*');
-        selectAllSVGElement.forEach((element) => {
-            element.classList.remove('stroke-tertiary-300');
-            element.classList.add('stroke-primary');
-        });
+        });  */  
 
     }, []);
 
@@ -31,7 +42,7 @@ function FavDay() {
             <div className="bg-primary h-screen">
                 <h1 className="pt-20 text-center text-tertiary-100 font-black">FAV DAY EN COURS</h1>
             </div>
-            <Footer/>
+            <Footer SelectedIcon={"3"}/>
         </>
     )
     
