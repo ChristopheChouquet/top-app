@@ -106,7 +106,7 @@ return(
                             defaultChecked={abo.includes(user._id)}
                             />
                         <span className="font-bold border border-secondary px-4 py-2 rounded-3xl dark:bg-tertiary-100 peer-checked:dark:bg-secondary text-primary text-center checkAbo">
-                            { abo.includes(user._id) ? "ABONNÉ" : "S'ABONNER" }
+                            { abo.includes(user._id) ? "ABONNÉ(E)" : "S'ABONNER" }
                         </span>
                     </label>
                 </div>
