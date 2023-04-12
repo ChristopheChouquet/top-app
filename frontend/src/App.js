@@ -14,6 +14,7 @@ import FavDayAdmin from './Pages/admin/favDay';
 import Loader from './Pages/loader';
 import FavDay from './Pages/favDay';
 import { UserProvider } from './UserContext';
+import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path='/profil' element={<Profil/>}/>
             <Route path='/admin/users' element={<UsersAdmin/>}/>
             <Route path='/admin/favday' element={<FavDayAdmin/>}/>
+            <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/' element={<Home />}/>
           </Routes>

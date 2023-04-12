@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FooterAdmin from "./footer";
+import HeaderAdmin from "./Header";
 
 function UsersAdmin() {
 
@@ -40,6 +41,7 @@ function UsersAdmin() {
 
     return(
         <>
+            <HeaderAdmin/>
 
             <div className="mt-6 mb-20">
 
@@ -119,12 +121,6 @@ function UsersAdmin() {
 
                 
             </div>
-
-
-
-            
-
-
             <FooterAdmin/>
         </>
         
