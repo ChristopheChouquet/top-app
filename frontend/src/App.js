@@ -15,6 +15,7 @@ import Loader from './Pages/loader';
 import FavDay from './Pages/favDay';
 import { UserProvider } from './UserContext';
 import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
+import TestCropperParent from './Pages/testCropperParent';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path='/admin/users' element={<UsersAdmin/>}/>
             <Route path='/admin/favday' element={<FavDayAdmin/>}/>
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
+            <Route path='/testcropper' element={<TestCropperParent/>}/>
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/' element={<Home />}/>
           </Routes>
