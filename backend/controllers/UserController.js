@@ -59,6 +59,8 @@ export const saveUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
+            avatar: req.body.avatar,
+            banniere: req.body.banniere,
             pseudo: req.body.pseudo,
             tagName: req.body.tagName,
             email: req.body.email,

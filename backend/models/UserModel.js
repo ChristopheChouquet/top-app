@@ -7,6 +7,14 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
  
 const User = mongoose.Schema({
+    avatar:{
+        type: String,
+        required: true
+    },
+    banniere:{
+        type: String,
+        required: true
+    },
     pseudo:{
         type: String,
         required: true

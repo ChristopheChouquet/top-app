@@ -24,3 +24,8 @@ body{
   .slide-in.active {
     transform: translateX(100%);
   }
+
+  /* PAGE PROFIL */
+  .width-custom-mask-profil{
+    width: 70px;
+  }
