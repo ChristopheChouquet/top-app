@@ -86,6 +86,7 @@ export const updateUser = async (req, res) => {
 
 export const addUserAbo = (req, res, next) => {
     const { UserCurrent, UserAbo } = req.body;
+    console.log('req.body', req.body);
     User.findById(UserCurrent)
         .then(user => {
             user.abonnement.push(UserAbo);

@@ -10,9 +10,9 @@ const [user, setUser] = useState([]);
 // Stockage des abonnements
 const [abo, setAbo] = useState([]); 
 
-useEffect(() => {
+const userId = JSON.parse(localStorage.getItem("userData")).userId;
 
-    const userId = JSON.parse(localStorage.getItem("userData")).userId;
+useEffect(() => {
 
     axios({
         method: 'get',
@@ -37,7 +37,7 @@ useEffect(() => {
 
     function abonnement(etat, userClicked) {
         
-        const userId = JSON.parse(localStorage.getItem("userData")).userId;
+        
         let etatAbo = '';
     
         etatAbo = etat.target.checked ? "add" : "del";
@@ -46,6 +46,7 @@ useEffect(() => {
             UserCurrent: userId,
             UserAbo: userClicked
         };
+
     
         axios({
             method: 'post',

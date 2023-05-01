@@ -16,6 +16,7 @@ import FavDay from './Pages/favDay';
 import { UserProvider } from './UserContext';
 import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
 import TestCropperParent from './Pages/testCropperParent';
+import AffichageTops from './Components/AffichageTops';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
             <Route path='/testcropper' element={<TestCropperParent/>}/>
             <Route path='/logincreate' element={<LoginCreate/>}/>
+            <Route path='/affichagetops' element={<AffichageTops/>}/>
             <Route path='/' element={<Home />}/>
           </Routes>
         </BrowserRouter>

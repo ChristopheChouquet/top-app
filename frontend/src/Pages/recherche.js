@@ -5,7 +5,7 @@ import Header from "../Components/Header";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import RechercheGestionAbo from "../Components/RechercheGestionAbo";
-import RechercheGestionTops from "../Components/RechercheGestionTops";
+import AffichageTops from "../Components/AffichageTops";
 
 function Recherche() {
      
@@ -139,7 +139,7 @@ function Recherche() {
             </div>
             
             {filterPersonneState && <RechercheGestionAbo searchValue={searchValue}/>} 
-            {filterPostsState && <RechercheGestionTops searchValue={searchValue}/>}  
+            {filterPostsState && <AffichageTops searchValue={searchValue}/>}  
             <Footer SelectedIcon={"2"}/>
         </>
     )
