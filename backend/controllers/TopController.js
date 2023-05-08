@@ -12,6 +12,26 @@ export const getAllTops = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
   };
 
+export const getTopById = (req, res, next) => {
+    const topId = req.params.topId;
+
+    Top.find({ _id: topId })
+    .then(tops => res.status(200).json(tops))
+    .catch(error => res.status(400).json({ error }));
+};
+
+
+export const UpdatedTopsLikes = (req, res, next) => {
+
+    const topId = req.params.topId;
+    const likes = req.body;
+    
+    Top.findOneAndUpdate({ _id: topId }, {like: likes})
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(400).json({ error }));
+    
+};
+
 
 export const saveTop = (req, res, next) => {
     
@@ -26,7 +46,11 @@ export const saveTop = (req, res, next) => {
         userId: userId,
         titre: req.body.titre,
         motCle: req.body.motCle,
-        choix: {}
+        choix: {},
+        like: {
+            compteur: 0,
+            users: []
+        }
     });
     
     //On aprcours tous les choix

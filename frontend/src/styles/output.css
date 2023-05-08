@@ -1041,6 +1041,10 @@ video {
   stroke: #B2B2B2;
 }
 
+.stroke-tertiary-400 {
+  stroke: #000000;
+}
+
 .p-10 {
   padding: 2.5rem;
 }
@@ -1126,10 +1130,6 @@ video {
 
 .pr-0 {
   padding-right: 0px;
-}
-
-.pt-10 {
-  padding-top: 2.5rem;
 }
 
 .pt-2 {

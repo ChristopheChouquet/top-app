@@ -58,6 +58,16 @@ const Top = new mongoose.Schema({
             type: String
         }
     },
+    like: {
+        compteur: {
+            type: Number,
+            default: 0
+        },
+        users: {
+            type: [String],
+            default: []
+        }
+    },
     date: {
         type: Date,
         default: Date.now

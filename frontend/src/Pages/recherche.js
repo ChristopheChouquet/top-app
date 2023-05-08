@@ -19,6 +19,7 @@ function Recherche() {
     const [filterPersonneState, setfilterPersonneState] = useState(true);
     // on vérifie l'était du filtre top
     const [filterPostsState, setfilterTopsState] = useState(false);
+    
 
 
     //On vérifie que l'utilisateur est bien connecté
@@ -37,41 +38,17 @@ function Recherche() {
 
 
     function FilterUsers() {
-
-        document.getElementById('slider').classList.remove('active');
-
-        document.getElementById('prersonnes').classList.add('border-secondary');
-        document.getElementById('prersonnes').classList.remove('border-tertiary-300');
-      
-        document.querySelector('#prersonnes > h1').classList.add('animate-text');
-        document.querySelector('#prersonnes > h1').classList.add('text-secondary');
-        document.querySelector('#prersonnes > h1').classList.remove('text-tertiary-300');
-      
-      
-        document.querySelector('#posts > h1').classList.add('animate-text');
-        document.querySelector('#posts > h1').classList.remove('text-secondary');
-        document.querySelector('#posts > h1').classList.add('text-tertiary-300');
       
         setfilterPersonneState(true);
         setfilterTopsState(false);
-      }
-      function FilterTops() {
-
-        document.getElementById('slider').classList.add('active');
-        
+    }
       
-        document.querySelector('#prersonnes > h1').classList.add('animate-text');
-        document.querySelector('#prersonnes > h1').classList.remove('text-secondary');
-        document.querySelector('#prersonnes > h1').classList.add('text-tertiary-300');
-            
-        document.querySelector('#posts > h1').classList.add('animate-text');
-        document.querySelector('#posts > h1').classList.add('text-secondary');
-        document.querySelector('#posts > h1').classList.remove('text-tertiary-300');
+    function FilterTops() {
       
         setfilterPersonneState(false);
         setfilterTopsState(true);
 
-      }
+    }
 
 
 
@@ -120,20 +97,26 @@ function Recherche() {
             <div id="recherchePostPersonne" className="grid grid-cols-2 px-16 text-center">
                 <div 
                     id="prersonnes" 
-                    className="cursor-pointer"
+                    className={filterPersonneState ? "cursor-pointer border-tertiary-300" : "cursor-pointer border-secondary"}
                     onClick={FilterUsers}
                 >
-                    <h1 className="text-secondary font-bold">PERSONNES</h1>
+                    <h1 
+                        className={filterPersonneState ? "font-bold text-secondary" : " font-bold animate-text text-tertiary-300 "}
+                    >PERSONNES</h1>
                 </div> 
                 <div 
                     id="posts"
                     className="cursor-pointer"
                     onClick={FilterTops}
                 >
-                    <h1 className="text-tertiary-300 font-bold">POSTS</h1>
+                    <h1 
+                        className={filterPersonneState ? "font-bold text-tertiary-300" : "font-bold animate-text  text-secondary"}
+                    >POSTS</h1>
                 </div>
-                <div>
-                    <hr id="slider" className="slide-in border-2 border-secondary"></hr>
+                <div> 
+                    <hr id="slider" 
+                        className={filterPersonneState ? "slide-in border-2 border-secondary" : "slide-in border-2 border-secondary active"}
+                    ></hr>
                 </div>
                 
             </div>

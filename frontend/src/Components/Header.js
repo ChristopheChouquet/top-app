@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { NavLink, useNavigate    } from "react-router-dom";
@@ -11,6 +11,36 @@ function Header({userDonne}) {
 
     // initialisation de l'objet navigate
     const navigate = useNavigate(); 
+
+    const [avatarUser, setAvatarUser] = useState("");
+
+
+    useEffect(() => {
+
+        //On récupère le cookie
+            const cookie = document.cookie;
+        // Recherche du token d'authentification dans le cookie
+            const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
+        // Extrait la valeur du token d'authentification
+            const tokenValue = token ? token.split('=')[1] : null;
+            var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
+            !verifAuth && navigate('/login');
+
+        //On récupère l'iD du user connecté
+        const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
+
+
+
+        axios({
+            method: 'get',
+            url: `http://localhost:5000/user/${currentUserId}`
+        }).then(function (response) {
+            setAvatarUser(response.data[0].avatar);
+        }).catch(() => { 
+            
+        });
+
+    },[]);
 
     //Gestion de la connexion user
     function logout() {  
@@ -44,9 +74,9 @@ function Header({userDonne}) {
                     <Menu as="div" className="relative inline-block text-left">
                         <div>
                             <Menu.Button>
-                                <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                                    src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt=""
+                                <img className="inline-block h-8 w-8 rounded-full"
+                                    src={avatarUser}
+                                    alt="Avatar"
                                 />
                             </Menu.Button>
                         </div>

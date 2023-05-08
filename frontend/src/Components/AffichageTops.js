@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Footer from "../Components/Footer";
+import GestionLike from "./GestionLike";
 
 function AffichageTops({ searchValue, userIdProfil }) {
 
@@ -8,6 +8,8 @@ function AffichageTops({ searchValue, userIdProfil }) {
         const [allInfos, setAllInfos] = useState([]);
     //Chargement des datas
         const [loading, setLoading] = useState(true);
+    //On récupère l'iD du user connecté
+        const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
 
     useEffect(() => {
 
@@ -43,9 +45,11 @@ function AffichageTops({ searchValue, userIdProfil }) {
                             keywords: item.motCle,
                             titre: item.titre,
                             choix: item.choix,
+                            like: item.like   
                         }
                         
                         setAllInfos(allInfos => [...allInfos, RecupAllInfos]);
+                        
                          
                     }
                 }).catch((error) => { 
@@ -89,9 +93,7 @@ function AffichageTops({ searchValue, userIdProfil }) {
         filteredTops = [...allInfos];
     }
         
-    
-    
-
+ 
 
     return(
         <>
@@ -153,6 +155,7 @@ function AffichageTops({ searchValue, userIdProfil }) {
                             </div>
 
                             <div className='p-2.5 flex w-5/6 justify-around'>
+                                {/* Share */}
                                 <div>
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 35.9 35.9" fill="none" strokeWidth={1.5} stroke="#1D1D1B">
                                         <g>
@@ -165,21 +168,18 @@ function AffichageTops({ searchValue, userIdProfil }) {
                                     </svg>
                                 </div>
                                 
-
-                                <div className="flex">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 40.5 35.8" fill="none" strokeWidth={1.5} className="w-6 h-6">
-                                        <path stroke="#1D1D1B" d="M20.2,35l15.9-16.3c2.2-1.9,3.6-4.7,3.6-7.8c0-5.6-4.4-10.1-9.9-10.1c-4.7,0-8.6,3.4-9.6,7.9
-                                        c-1-4.5-4.9-7.8-9.6-7.8c-5.4,0-9.9,4.5-9.9,10.1c0,3.1,1.3,5.8,3.5,7.7l10.9,11.2"/>
-                                    </svg>&nbsp;<span className="text-sm">1</span>
-                                </div>
+                                {/* like */}
+                                <GestionLike currentTopId={top.topId} currentUserId={currentUserId}/>
                                 
+                                {/* commentaires */}
                                 <div className="flex">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 36.1 36.6" fill="none" strokeWidth={1.5}  className="w-6 h-6">
                                         <path stroke="#1D1D1B" d="M4,28.1l-2.5,7.8l7.7-2.9c2.6,1.5,5.6,2.4,8.8,2.4c9.6,0,17.3-7.8,17.3-17.3c0-9.6-7.8-17.3-17.3-17.3
                                         C8.5,0.8,0.8,8.5,0.8,18.1c0,0.8,0.1,1.7,0.2,2.5"/>
                                     </svg>&nbsp;<span className="text-sm">1</span>
                                 </div>
-                                
+
+                                {/* Same fav */}
                                 <div className="flex">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 36.7 36.7" className="w-6 h-6">
                                         <g>
