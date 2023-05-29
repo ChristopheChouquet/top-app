@@ -50,7 +50,6 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
             const copyDataChip = [...chipDataCreate, newChip ];
             setChipDataCreate(copyDataChip);
             setInputValueChip('');
-            console.log('chipDataCreate', copyDataChip);
         }
         
     }
@@ -62,9 +61,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
 
 
     const onSubmit = function(data) {
-        console.log('datas', data);
-        console.log('chipDataCreate', chipDataCreate);
-
+        
         const newUserAccount = {
             avatar: "img/avatar/defaultUserImg.png",
             banniere: "img/avatar/defaultUserBan.png",
@@ -74,13 +71,12 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
             password: data.password,
             motCles: {}
         };
-
-        
+    
         //On parcours tous les mot clés et on récupére leur valeur
         for (let i = 0; i < chipDataCreate.length; i++) {
             newUserAccount.motCles[`chip${i+1}`] = chipDataCreate[i].valeur;
         }
-        console.log(newUserAccount);
+        
         //On envoie le nouveau top au serveur
         datas(newUserAccount);
         

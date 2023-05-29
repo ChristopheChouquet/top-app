@@ -2,7 +2,7 @@ body{
     background-color: #eee;
 }
 
-.checkAbo{
+.checkAbo, .btnProfilModif{
     width: 125px;
 }
 
@@ -24,8 +24,22 @@ body{
   .slide-in.active {
     transform: translateX(100%);
   }
+  .slide-in.active.end {
+    transform: translateX(200%);
+  }
 
   /* PAGE PROFIL */
   .width-custom-mask-profil{
     width: 70px;
+  }
+
+
+
+  .fileInputLabel {
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .fileInput {
+    display: none;
   }

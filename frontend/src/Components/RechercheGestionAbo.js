@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -26,6 +27,7 @@ useEffect(() => {
         const currentUser = response.data.filter(user => user._id === userId)[0];
         const currentUserAbo = currentUser ? currentUser.abonnement : [];
         setAbo(currentUserAbo);
+        
 
 
     }).catch((error) => {  
@@ -33,6 +35,7 @@ useEffect(() => {
     }); 
 
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
     function abonnement(etat, userClicked) {
@@ -78,24 +81,26 @@ return(
         <div key={user._id}>
             <div className="w-full flex flex-wrap p-4 my-2 rounded-lg text-left justify-between items-center">
                 <div className="w-96">
-                    <div className="flex items-start"> 
-                        <img className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
-                            src={user.avatar}
-                            alt="Avatar"
-                        />
-                        <div>
-                            <p className="text-tertiary-400 font-bold">{user.pseudo}</p>
-                            <p className="text-tertiary-400 font-semi">@{user.tagName}</p>
-                            <div className="flex flex-wrap">
-                                {/* //Affichage des mot clés s'ils existent */}
-                                {user.motCles && (
-                                    Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
-                                        <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
-                                    ))
-                                )}
+                    <NavLink to={`/profil/${user.tagName}`}>
+                        <div className="flex items-start"> 
+                            <img className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
+                                src={user.avatar}
+                                alt="Avatar"
+                            />
+                            <div>
+                                <p className="text-tertiary-400 font-bold">{user.pseudo}</p>
+                                <p className="text-tertiary-400 font-semi">@{user.tagName}</p>
+                                <div className="flex flex-wrap">
+                                    {/* //Affichage des mot clés s'ils existent */}
+                                    {user.motCles && (
+                                        Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
+                                            <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
+                                        ))
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </div> 
+                        </div> 
+                    </NavLink>
                 </div>
                 <div className="">
                     <label htmlFor={`abonne_${user._id}`} className="flex justify-center items-center p-2 rounded-md cursor-pointer">

@@ -17,6 +17,8 @@ import { UserProvider } from './UserContext';
 import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
 import TestCropperParent from './Pages/testCropperParent';
 import AffichageTops from './Components/AffichageTops';
+import ProfilEdit from './Pages/profilEdit';
+import TestCropperParentVrai from './Pages/testCropperParent_vraiValeur';
 
 function App() {
   return (
@@ -29,11 +31,13 @@ function App() {
             <Route path='/loader' element={<Loader/>}/>
             <Route path='/favday' element={<FavDay/>}/>
             <Route path='/login' element={<Login/>}/>
-            <Route path='/profil' element={<Profil/>}/>
+            <Route path='/profil/:tagName' element={<Profil/>}/>
+            <Route path='/profiledit' element={<ProfilEdit/>}/>
             <Route path='/admin/users' element={<UsersAdmin/>}/>
             <Route path='/admin/favday' element={<FavDayAdmin/>}/>
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
-            <Route path='/testcropper' element={<TestCropperParent/>}/>
+            <Route path='/testcropper' element={<TestCropperParentVrai/>}/>
+            {/* <Route path='/testcropper' element={<TestCropperParent/>}/> */}
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/affichagetops' element={<AffichageTops/>}/>
             <Route path='/' element={<Home />}/>

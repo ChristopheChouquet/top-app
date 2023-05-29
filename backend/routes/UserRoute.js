@@ -4,6 +4,8 @@ import {
     getUsersById,
     getUserProfil,
     saveUser,
+    updateUser,
+    updateAvatarUser,
     addUserAbo,
     delUserAbo,
     login,
@@ -14,7 +16,9 @@ const router = express.Router();
  
 router.get('/recherche', getUsers);
 router.get('/user/:userId', getUsersById);
-router.get('/profil', getUserProfil);
+router.post('/updateuser', updateUser);
+router.post('/updateavataruser/:userId', updateAvatarUser);
+router.get('/profil/:tagName', getUserProfil);
 router.post('/signup', saveUser);
 router.post('/addUserAbo', addUserAbo);
 router.post('/delUserAbo', delUserAbo);

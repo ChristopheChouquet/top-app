@@ -10,6 +10,8 @@ const aspectRatios = [
 
 function ImageCropDialog({ id, imageUrl, cropInit, zoomInit, aspectInit, onCancel, setCroppedImageFor, resetImage }) {
 
+    console.log(id, imageUrl, cropInit, zoomInit, aspectInit, onCancel, setCroppedImageFor, resetImage);
+
     if (zoomInit == null) {
         zoomInit = 1;
     }

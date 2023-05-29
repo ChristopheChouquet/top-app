@@ -12,7 +12,7 @@ function Header({userDonne}) {
     // initialisation de l'objet navigate
     const navigate = useNavigate(); 
 
-    const [avatarUser, setAvatarUser] = useState("");
+    const [infosUser, setInfosUser] = useState("");
 
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function Header({userDonne}) {
             method: 'get',
             url: `http://localhost:5000/user/${currentUserId}`
         }).then(function (response) {
-            setAvatarUser(response.data[0].avatar);
+            setInfosUser(response.data[0]);
         }).catch(() => { 
             
         });
@@ -75,7 +75,7 @@ function Header({userDonne}) {
                         <div>
                             <Menu.Button>
                                 <img className="inline-block h-8 w-8 rounded-full"
-                                    src={avatarUser}
+                                    src={process.env.PUBLIC_URL + '/' + infosUser.avatar}
                                     alt="Avatar"
                                 />
                             </Menu.Button>
@@ -93,16 +93,19 @@ function Header({userDonne}) {
                             <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
                                 <Menu.Item>
-                                {({ active }) => (
-                                    <a
-                                    href="/profil"
-                                    className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                        'block px-4 py-2 text-sm'
-                                    )}
-                                    >
-                                    Profil
-                                    </a>
+                                {({ active }) => (     
+                                       
+                                    <NavLink to={`/profil/${infosUser.tagName}`}>
+                                        <button
+                                            type="button"
+                                            className={classNames(
+                                                active ? 'bg-gray-100 text-gray-900 w-full text-left' : 'text-gray-700',
+                                                'block px-4 py-2 text-sm w-full text-left'
+                                            )}
+                                        >
+                                        Profil
+                                        </button>
+                                    </NavLink>
                                 )}
                                 </Menu.Item>
                                 <Menu.Item>
@@ -111,8 +114,8 @@ function Header({userDonne}) {
                                         type="submit" 
                                         onClick={logout}
                                         className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                            'block px-4 py-2 text-sm'
+                                            active ? 'bg-gray-100 text-gray-900 w-full text-left' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm w-full text-left'
                                         )}
                                     >
                                         Deconnexion

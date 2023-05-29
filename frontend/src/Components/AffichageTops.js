@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GestionLike from "./GestionLike";
+import { NavLink } from "react-router-dom";
 
-function AffichageTops({ searchValue, userIdProfil }) {
+function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
 
     // Stockage all infos
         const [allInfos, setAllInfos] = useState([]);
@@ -89,6 +90,14 @@ function AffichageTops({ searchValue, userIdProfil }) {
             const userIdoMatches = userIdLowerCase.includes(searchValueLowerCase);
             return userIdoMatches;
         });
+    }else if(userIdProfilLike){
+        filteredTops = allInfos.filter((top) => {
+            const searchValueLowerCase = userIdProfilLike.toLowerCase();
+            const users = top.like.users;
+            const userIds = users.map(user => user.toLowerCase());
+
+            return userIds.includes(searchValueLowerCase);
+        });
     }else{
         filteredTops = [...allInfos];
     }
@@ -121,26 +130,27 @@ function AffichageTops({ searchValue, userIdProfil }) {
                         <div key={top.topId} className="w-4/5 border-2 border-secondary flex flex-wrap p-2.5 my-2 rounded-lg text-left justify-start">
                             <div>
 
-                                <div className="flex">
-                                    <div>
-                                        <img 
-                                            className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
-                                            src={top.avatar}
-                                            alt={`Avatar de ${top.pseudo}`}
-                                        />
-                                    </div>
-                                    
-                                    <div>
-                                        <p className="font-semi">{top.pseudo}<span className="font-normal text-tertiary-300"> @{top.tagName} / {top.date}</span></p>
-                                        <p className="text-primary font-bold font-myriad">{top.titre}</p>
-                                        <div className="flex flex-wrap">
-                                            {Array(10).fill(null).map((_, i) => top.keywords[`chip${i+1}`] && (
-                                                <p className="text-tertiary-300 text-sm " key={i}>#{top.keywords[`chip${i+1}`]}&nbsp;</p>
-                                            ))}
+                                <NavLink to={`/profil/${top.tagName}`}>
+                                    <div className="flex">
+                                        <div>
+                                            <img 
+                                                className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
+                                                src={process.env.PUBLIC_URL + '/' + top.avatar}
+                                                alt={`Avatar de ${top.pseudo}`}
+                                            />
+                                        </div>
+                                        
+                                        <div>
+                                            <p className="font-semi">{top.pseudo}<span className="font-normal text-tertiary-300"> @{top.tagName} / {top.date}</span></p>
+                                            <p className="text-primary font-bold font-myriad">{top.titre}</p>
+                                            <div className="flex flex-wrap">
+                                                {Array(10).fill(null).map((_, i) => top.keywords[`chip${i+1}`] && (
+                                                    <p className="text-tertiary-300 text-sm " key={i}>#{top.keywords[`chip${i+1}`]}&nbsp;</p>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                    
+                                </NavLink>
                                 
                                 <div className="flex justify-start">
                                     <button type="submit" className="bg-primary text-tertiary-100 rounded-3xl px-6 py-2 m-3 ml-0 font-nunito font-bold">Top détaillé</button>
