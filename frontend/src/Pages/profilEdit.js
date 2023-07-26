@@ -15,7 +15,15 @@ function ProfilEdit({datas}) {
     const [user, setUser] = useState([]);
     //stockage de l'image selectionné dans l'input
     const [imageselect, setImageSelect] = useState(null);
+    const [imageselectBan, setImageSelectBan] = useState(null);
     const [imgs, setImgs] = useState([]);
+    const [imgsBan, setImgsBan] = useState([]);
+    const [imgsUpdate, setImgsUpdate] = useState([]);
+
+    const aspectRatios = [
+        { value: 1/1, text:"avatar" },
+        { value: 36/7, text:"banniere" },
+    ];
 
     useEffect(() => {
 
@@ -38,69 +46,28 @@ function ProfilEdit({datas}) {
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
-
             const reader = new FileReader();
             reader.readAsDataURL(file); 
             reader.onloadend = () => {
                 const base64Image = reader.result;
-                setImageSelect(base64Image);
+                event.target.id === "fileInputBan" ? setImageSelectBan(base64Image) : setImageSelect(base64Image);
             };
-
-            console.log('imageselect', imageselect);
-            console.log('imgs', imgs);
-
-            /* const options = {
-                maxSizeMB: 0.03, // Taille maximale de l'image compressée en Mo (30 Ko dans cet exemple)
-                maxWidthOrHeight: 1500, // Largeur ou hauteur maximale de l'image
-                useWebWorker: true, // Utilisation d'un Web Worker pour la compression
-                fileType: 'jpeg', // Format de fichier de sortie (jpeg dans cet exemple)
-                maxIteration: 10, // Nombre maximum d'itérations de compression
-                initialQuality: 1, // Qualité de compression initiale (entre 0 et 1)
-            };
-      
-            imageCompression(file, options)
-            .then((compressedFile) => {
-            // Convertir le fichier compressé en base64
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                const compressedBase64Image = reader.result;
-
-                console.log('file base64', compressedBase64Image);
-    
-                // Récupérer la taille de l'image compressée
-                const byteLength = compressedBase64Image.length;
-                const kilobytes = Math.ceil(byteLength / 1024);
-    
-                setImageSelect(compressedBase64Image);
-                console.log(kilobytes + ' Ko');
-            };
-            })
-            .catch((error) => {
-            console.error('Erreur lors de la compression de l\'image :', error);
-            }) */ 
             
         }
     };
 
-
-
     const setCroppedImageFor = (id, crop, zoom, aspect, croppedImageUrl) => {
-        setImgs(croppedImageUrl);
+        aspect.value === 36/7 ? setImgsBan(croppedImageUrl) : setImgs(croppedImageUrl);
+
         setImageSelect(null);
+        setImageSelectBan(null);
      
     }; 
 
-
     const onCancel = () => {
         setImageSelect(null);
+        setImageSelectBan(null);
     }
-      
-    const resetImage = (id) => {
-        setCroppedImageFor(id);
-    };
-
-
 
     //Usetate des chips (mot clés)
     const [inputValueChip, setInputValueChip] = useState('');
@@ -137,6 +104,7 @@ function ProfilEdit({datas}) {
         }));
     };
 
+
     //Validation des modifs
     const onSubmit = function(data) {
 
@@ -146,60 +114,114 @@ function ProfilEdit({datas}) {
         //On récupère l'iD du user connecté
         const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
 
-        const imageUrl = imgs;
-        fetch(imageUrl)
-        .then((response) => response.blob())
-        .then((blob) => {
-            const options = {
-                maxSizeMB: 0.03, // Taille maximale de l'image compressée en Mo (30 Ko dans cet exemple)
-                maxWidthOrHeight: 100, // Largeur ou hauteur maximale de l'image
-                useWebWorker: true, // Utilisation d'un Web Worker pour la compression
-                fileType: 'jpeg', // Format de fichier de sortie (jpeg dans cet exemple)
-                maxIteration: 10, // Nombre maximum d'itérations de compression
-                initialQuality: 1, // Qualité de compression initiale (entre 0 et 1)
-            };
-      
-            imageCompression(blob, options)
-            .then((compressedFile) => {
-            // Convertir le fichier compressé en base64
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                const compressedBase64Image = reader.result;
+        const optionsCompress = {
+            maxSizeMB: 0.03, // Taille maximale de l'image compressée en Mo (30 Ko dans cet exemple)
+            maxWidthOrHeight: 100, // Largeur ou hauteur maximale de l'image
+            useWebWorker: true, // Utilisation d'un Web Worker pour la compression
+            fileType: 'jpeg', // Format de fichier de sortie (jpeg dans cet exemple)
+            maxIteration: 10, // Nombre maximum d'itérations de compression
+            initialQuality: 1, // Qualité de compression initiale (entre 0 et 1)
+        };
 
-                // Récupérer la taille de l'image compressée
-                const byteLength = compressedBase64Image.length;
-                const kilobytes = Math.ceil(byteLength / 1024);
-    
-                setImgs(compressedBase64Image);
-                console.log(kilobytes + ' Ko');
+        if (imgs) {
+            fetch(imgs)
+            .then((response) => response.blob())
+            .then((blob) => {
+                
+        
+                imageCompression(blob, optionsCompress)
+                .then((compressedFile) => {
+                // Convertir le fichier compressé en base64
+                const reader = new FileReader();
+                reader.readAsDataURL(compressedFile);
+                reader.onloadend = () => {
+                    const compressedBase64Image = reader.result;
+
+                    // Récupérer la taille de l'image compressée
+                    const byteLength = compressedBase64Image.length;
+                    const kilobytes = Math.ceil(byteLength / 1024);
+        
+                    setImgs(compressedBase64Image);
+                    console.log(kilobytes + ' Ko');
 
 
-                const updateUserAccount = {
-                    IDuser: currentUserId,
-                    avatar: compressedBase64Image,
-                    pseudo: newPseudo,
-                    motCles: user.motCles
+                    const updateUserAccount = {
+                        IDuser: currentUserId,
+                        avatar: compressedBase64Image,
+                        pseudo: newPseudo,
+                        motCles: user.motCles
+                    };
+
+                    axios({
+                        method: 'post',
+                        url:   process.env.REACT_APP_BACKEND_URL + '/updateuser',
+                        data: updateUserAccount
+                    }).then((response) => {
+                        console.log(response);
+                    }).catch((error) => { 
+                        console.error(error);
+                    });
                 };
-
-                axios({
-                    method: 'post',
-                    url:   process.env.REACT_APP_BACKEND_URL + '/updateuser',
-                    data: updateUserAccount
-                }).then((response) => {
-                    console.log(response);
-                }).catch((error) => { 
-                    console.error(error);
-                });
-            };
+                })
+                .catch((error) => {
+                console.error('Erreur lors de la compression de l\'image :', error);
+                }) 
             })
             .catch((error) => {
-            console.error('Erreur lors de la compression de l\'image :', error);
-            }) 
-        })
-        .catch((error) => {
-            console.error('Erreur lors de la récupération du Blob:', error);
-        });
+                console.error('Erreur lors de la récupération du Blob:', error);
+            });
+        }
+
+        if (imgsBan) {
+            fetch(imgsBan)
+            .then((response) => response.blob())
+            .then((blob) => {
+                        
+                imageCompression(blob, optionsCompress)
+                .then((compressedFile) => {
+                // Convertir le fichier compressé en base64
+                const reader = new FileReader();
+                reader.readAsDataURL(compressedFile);
+                reader.onloadend = () => {
+                    const compressedBase64Image = reader.result;
+
+                    // Récupérer la taille de l'image compressée
+                    const byteLength = compressedBase64Image.length;
+                    const kilobytes = Math.ceil(byteLength / 1024);
+        
+                    setImgsBan(compressedBase64Image);
+                    console.log(kilobytes + ' Ko');
+
+
+                    const updateUserAccount = {
+                        IDuser: currentUserId,
+                        banniere: compressedBase64Image,
+                        pseudo: newPseudo,
+                        motCles: user.motCles
+                    };
+
+                    axios({
+                        method: 'post',
+                        url:   process.env.REACT_APP_BACKEND_URL + '/updateuser',
+                        data: updateUserAccount
+                    }).then((response) => {
+                        console.log(response);
+                    }).catch((error) => { 
+                        console.error(error);
+                    });
+                };
+                })
+                .catch((error) => {
+                console.error('Erreur lors de la compression de l\'image :', error);
+                }) 
+            })
+            .catch((error) => {
+                console.error('Erreur lors de la récupération du Blob:', error);
+            });
+        }
+
+        
+        
 
         
     }
@@ -215,36 +237,43 @@ function ProfilEdit({datas}) {
 
                         <form onSubmit={handleSubmit(onSubmit)} className='w-full'>  
 
-                        {/* Gestion de l'avatar et de la banniere */}
-                        <div className="flex relative mb-10">
-                            <div className="w-full text-center relative flex flex-col justify-center">
-                                <img 
-                                    src={process.env.PUBLIC_URL + '/' + user.banniere} 
-                                    alt="banniere" 
-                                    className="h-28"
-                                />
-                            </div>
-   
-                            <div className="absolute z-10 left-0 bg-white h-full width-custom-mask-profil"></div>
-                            <div className="w-1/5 absolute z-10 left-0">
-                                <label htmlFor="fileInput" className="fileInputLabel">
-                                    <img 
-                                        alt="preview" 
-                                        src={imgs.length !== 0 ? imgs : process.env.PUBLIC_URL + '/' + user.avatar}
-                                        className="rounded-full border-8 border-tertiary-100 h-28 w-28"
+                            {/* Gestion de l'avatar et de la banniere */}
+                            <div className="flex relative mb-10">
+                                <div className="w-full text-center relative flex flex-col justify-center">
+                                    
+                                    <label htmlFor="fileInputBan" className="fileInputLabel">
+                                        <img 
+                                            //src={process.env.PUBLIC_URL + '/' + user.banniere} 
+                                            src={imgsBan.length !== 0 ? imgsBan : process.env.PUBLIC_URL + '/' + user.banniere}
+                                            alt="banniere" 
+                                            className="h-28"
+                                        />
+                                    </label>
+                                    <input 
+                                        type="file" 
+                                        id="fileInputBan" 
+                                        onChange={onImageChange}
+                                        className="fileInput" 
                                     />
-                                </label>
-                                <input 
-                                    type="file" 
-                                    id="fileInput" 
-                                    onChange={onImageChange}
-                                    className="fileInput" 
-                                />
-                            </div>
-                            
-
-
-                        </div> 
+                                </div>
+    
+                                <div className="absolute z-10 left-0 bg-white h-full width-custom-mask-profil"></div>
+                                <div className="w-1/5 absolute z-10 left-0">
+                                    <label htmlFor="fileInput" className="fileInputLabel">
+                                        <img 
+                                            alt="preview" 
+                                            src={imgs.length !== 0 ? imgs : process.env.PUBLIC_URL + '/' + user.avatar}
+                                            className="rounded-full border-8 border-tertiary-100 h-28 w-28"
+                                        />
+                                    </label>
+                                    <input 
+                                        type="file" 
+                                        id="fileInput" 
+                                        onChange={onImageChange}
+                                        className="fileInput" 
+                                    />
+                                </div>
+                            </div> 
       
                             
                             <div className='mt-5 p-10'>
@@ -299,9 +328,6 @@ function ProfilEdit({datas}) {
 
                             </div>
 
-                            
-
-
                             <div className='mt-8 flex flex-col items-center p-10'>
                                 <button type="submit" id="buttonSubmit" className="bg-primary text-tertiary-100 rounded-full px-6 py-2 mb-5 w-full">
                                 ENREGISTRER LES MODIFICATIONS
@@ -315,18 +341,17 @@ function ProfilEdit({datas}) {
                 </div>
                 
             <Footer SelectedIcon={null}/>
-            {imageselect ? (
+            {imageselect || imageselectBan ? (
                 <div className="fixed z-50 top-0 left-0 h-full w-full">
                     <ImageCropDialog 
-                        id={imageselect.id} 
-                        imageUrl={imageselect}
-                        cropInit={imageselect.crop}
-                        zoomInit={imageselect.zoom}
-                        aspectInit={imageselect.aspect}
+                        id={imageselectBan ? imageselectBan.id : imageselect.id}
+                        imageUrl={imageselectBan ? imageselectBan : imageselect}
+                        cropInit={imageselectBan ? imageselectBan.crop : imageselect.crop}
+                        zoomInit={imageselectBan ? imageselectBan.zoom : imageselect.zoom}
+                        aspectInit={imageselectBan ? aspectRatios[1] : aspectRatios[0]}
                         onCancel={onCancel}
                         setCroppedImageFor={setCroppedImageFor}
-                        resetImage={resetImage}
-                    />
+                    />            
                 </div>
             ) : null}
                             

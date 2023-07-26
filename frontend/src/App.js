@@ -15,10 +15,8 @@ import Loader from './Pages/loader';
 import FavDay from './Pages/favDay';
 import { UserProvider } from './UserContext';
 import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
-import TestCropperParent from './Pages/testCropperParent';
 import AffichageTops from './Components/AffichageTops';
 import ProfilEdit from './Pages/profilEdit';
-import TestCropperParentVrai from './Pages/testCropperParent_vraiValeur';
 
 function App() {
   return (
@@ -36,8 +34,6 @@ function App() {
             <Route path='/admin/users' element={<UsersAdmin/>}/>
             <Route path='/admin/favday' element={<FavDayAdmin/>}/>
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
-            <Route path='/testcropper' element={<TestCropperParentVrai/>}/>
-            {/* <Route path='/testcropper' element={<TestCropperParent/>}/> */}
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/affichagetops' element={<AffichageTops/>}/>
             <Route path='/' element={<Home />}/>

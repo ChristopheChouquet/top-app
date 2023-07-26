@@ -64,7 +64,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
         
         const newUserAccount = {
             avatar: "img/avatar/defaultUserImg.png",
-            banniere: "img/avatar/defaultUserBan.png",
+            banniere: "img/banniere/defaultUserBan.png",
             pseudo: data.pseudo,
             tagName : data.tagName,
             email: data.email,

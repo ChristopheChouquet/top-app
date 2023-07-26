@@ -74,50 +74,83 @@ export const saveUser = (req, res, next) => {
 
 //Mise à jour des utilisateur depuis le profil
 export const updateUser = (req, res) => {
-    const { IDuser, avatar, pseudo, motCles } = req.body;
+    const { IDuser, pseudo, motCles } = req.body;
+    const avatar = req.body.avatar || null;
+    const banniere = req.body.banniere || null;
 
-    if (avatar !== null) {
-        axios
-        .get(avatar, { responseType: 'arraybuffer' })
-        .then((response) => {
-            // Écrivez le contenu de l'image dans le fichier
-            const fileName = IDuser + "_avatar.jpg"; // Nom de fichier souhaité
-            const destinationPath = "../frontend/public/img/avatar/" + fileName; // Remplacez par le chemin de votre dossier final
-    
-            fs.writeFile(destinationPath, response.data, 'binary', (err) => {
-            if (err) {
-                console.error("Erreur lors de l'enregistrement de l'image :", err);
-                return res.status(500).json({ error: "Erreur lors de l'enregistrement de l'image" });
-            }
 
-                User.updateOne({ _id: IDuser }, { $set: { avatar: "img/avatar/" + fileName, pseudo: pseudo, motCles: motCles } })
+    if (avatar !== null || banniere !== null) {
+        const avatarPromise = avatar !== null
+            ? axios.get(avatar, { responseType: 'arraybuffer' })
+            : Promise.resolve(null);
+        
+        const bannierePromise = banniere !== null
+            ? axios.get(banniere, { responseType: 'arraybuffer' })
+            : Promise.resolve(null);
+
+        Promise.all([avatarPromise, bannierePromise])
+            .then(([avatarResponse, banniereResponse]) => {
+                // Traiter l'avatar
+                if (avatarResponse !== null) {
+                    // Écrivez le contenu de l'image dans le fichier
+                    const fileName = IDuser + "_avatar.jpg";
+                    const destinationPath = "../frontend/public/img/avatar/" + fileName;
+                    fs.writeFile(destinationPath, avatarResponse.data, 'binary', (err) => {
+                        if (err) {
+                            console.error("Erreur lors de l'enregistrement de l'avatar :", err);
+                            return res.status(500).json({ error: "Erreur lors de l'enregistrement de l'avatar" });
+                        }
+                        updateUserFields();
+                    });
+                }
+
+                // Traiter la bannière
+                if (banniereResponse !== null) {
+                    // Écrivez le contenu de l'image dans le fichier
+                    const fileName = IDuser + "_banniere.jpg";
+                    const destinationPath = "../frontend/public/img/banniere/" + fileName;
+                    fs.writeFile(destinationPath, banniereResponse.data, 'binary', (err) => {
+                        if (err) {
+                            console.error("Erreur lors de l'enregistrement de la bannière :", err);
+                            return res.status(500).json({ error: "Erreur lors de l'enregistrement de la bannière" });
+                        }
+                        updateUserFields();
+                    });
+                }
+
+                function updateUserFields() {
+                    // Mettre à jour les champs de l'utilisateur une fois que les images ont été traitées
+                    User.updateOne({ _id: IDuser }, { 
+                        $set: { 
+                            avatar: avatarResponse !== null ? "img/avatar/" + IDuser + "_avatar.jpg" : undefined,
+                            banniere: banniereResponse !== null ? "img/banniere/" + IDuser + "_banniere.jpg" : undefined,
+                            pseudo: pseudo,
+                            motCles: motCles
+                        }
+                    })
                     .then(() => {
                         res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
                     })
                     .catch((error) => {
                         res.status(400).json({ message: error.message });
                     });
-            
-            });
-        })
-        .catch((error) => {
-            console.error("Erreur lors du téléchargement de l'image :", error);
-            return res.status(500).json({ error: "Erreur lors du téléchargement de l'image" });
-        });
-        
-    }else{
-        User.updateOne({ _id: IDuser }, { $set: { pseudo: pseudo, motCles: motCles } })
-            .then(() => {
-                res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
+                }
             })
             .catch((error) => {
-                res.status(400).json({ message: error.message });
+                console.error("Erreur lors du téléchargement de l'image :", error);
+                return res.status(500).json({ error: "Erreur lors du téléchargement de l'image" });
             });
+    } else {
+        // Mettre à jour les champs de l'utilisateur sans avatar ni bannière
+        User.updateOne({ _id: IDuser }, { $set: { pseudo: pseudo, motCles: motCles } })
+        .then(() => {
+            res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
+        })
+        .catch((error) => {
+            res.status(400).json({ message: error.message });
+        });
     }
-    
-
-    
-  };
+};
 
 
 
