@@ -1,81 +1,129 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Footer from "../Components/Footer";
-import FormRecherche from "../Components/FormRecherche";
 import Header from "../Components/Header";
 
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import RechercheGestionAbo from "../Components/RechercheGestionAbo";
+import AffichageTops from "../Components/AffichageTops";
+
 function Recherche() {
-    // Stockage des tops
-        const [user, setUser] = useState([]); 
+     
+    //Mise en place de la gestion du form avec useForm
+    const {register, reset} = useForm();
+    // initialisation de l'objet navigate
+    const navigate = useNavigate(); 
+    // Ajoutez un état local pour stocker la valeur de recherche
+    const [searchValue, setSearchValue] = useState("");
+    // on vérifie l'était du filtre personnes
+    const [filterPersonneState, setfilterPersonneState] = useState(true);
+    // on vérifie l'était du filtre top
+    const [filterPostsState, setfilterTopsState] = useState(false);
+    
 
 
+    //On vérifie que l'utilisateur est bien connecté
     useEffect(() => {
-
-        axios({
-            method: 'get',
-            url: 'http://localhost:5000/recherche'
-        }).then((response) => {
-            setUser(response.data);
-        }).catch((error) => {  
-            console.error(error);
-        }); 
-
-        //Gestion des icons du footer
-        const footerIconSelector = document.querySelector('#footer > div > div > a:nth-child(2)');
-        const selectAllSVGElement = footerIconSelector.querySelectorAll('*');
-        selectAllSVGElement.forEach((element) => {
-            element.classList.remove('stroke-tertiary-300');
-            element.classList.add('stroke-primary');
-        });
-
-    }, []);
+        //On récupère le cookie
+            const cookie = document.cookie;
+        // Recherche du token d'authentification dans le cookie
+            const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
+        // Extrait la valeur du token d'authentification
+            const tokenValue = token ? token.split('=')[1] : null;
+            var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
+            !verifAuth && navigate('/login');
+            
+    }, [navigate]); 
+    
 
 
-    function dataRecherche(dataRecherche) {
-        console.log(dataRecherche);
-        
+    function FilterUsers() {
+      
+        setfilterPersonneState(true);
+        setfilterTopsState(false);
     }
+      
+    function FilterTops() {
+      
+        setfilterPersonneState(false);
+        setfilterTopsState(true);
+
+    }
+
 
 
     return(
         <>
             <Header/>
-            <div id="recherche" className="mb-16 mt-16">
+            <div id="recherche" className="mb-16 mt-12 pt-2">
+              
                 
-                <FormRecherche dataRecherche={dataRecherche}/>
-
-                {user.map(user => (
-                    <div key={user._id}>
-                        <div className="w-full flex flex-wrap p-4 my-2 rounded-lg text-left justify-between items-center">
-                            <div>
-                                <div className="flex items-center">
-                                    <img className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
-                                        src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                    />
-                                    <div>
-                                        <p className="text-tertiary-400 font-bold">{user.pseudo}</p>
-                                        <p className="text-tertiary-400 font-semi">{user.tagName}</p>
-                                        <div className="flex flex-wrap">
-                                            {Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
-                                                <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                <form>
+                    <div className='mt-5 flex flex-col px-20'>
+                        <div className="relative mt-2 rounded-md">
+                            <input 
+                                {...register('recherche')} 
+                                type="text"
+                                name="recherche" 
+                                id="recherche"
+                                placeholder="Recherche..."
+                                autoComplete='off' 
+                                className="w-full text-tertiary-400 border-2 border-primary rounded-full placeholder:text-sm placeholder:text-tertiary-300 pl-2 focus:outline-none"
+                                onChange={(e) => {
+                                    setSearchValue(e.target.value);
+                                }}
+                            />
+                            <div className="absolute inset-y-0 right-0 flex items-center">
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    fill="none" viewBox="0 0 24 24" 
+                                    strokeWidth={1.5} 
+                                    className="w-5 h-5 stroke-tertiary-300 mr-2"
+                                    onClick={(e) => {
+                                        setSearchValue("");
+                                        reset();
+                                    }}
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </div>
-                            <label htmlFor="abonne" className="flex justify-center items-center p-2 rounded-md cursor-pointer">
-                                <input id="abonne" type="checkbox" className="hidden peer" />
-                                <span className="font-bold border border-secondary px-4 py-2 rounded-3xl dark:bg-tertiary-100 peer-checked:dark:bg-secondary text-primary" >
-                                    S'ABONNER
-                                </span>
-                            </label>
                         </div>
                     </div>
-                ))}
+                </form>
+
+                    
                 
             </div>
-            <Footer/>
+            <div id="recherchePostPersonne" className="grid grid-cols-2 px-16 text-center">
+                <div 
+                    id="prersonnes" 
+                    className={filterPersonneState ? "cursor-pointer border-tertiary-300" : "cursor-pointer border-secondary"}
+                    onClick={FilterUsers}
+                >
+                    <h1 
+                        className={filterPersonneState ? "font-bold text-secondary" : " font-bold animate-text text-tertiary-300 "}
+                    >PERSONNES</h1>
+                </div> 
+                <div 
+                    id="posts"
+                    className="cursor-pointer"
+                    onClick={FilterTops}
+                >
+                    <h1 
+                        className={filterPersonneState ? "font-bold text-tertiary-300" : "font-bold animate-text  text-secondary"}
+                    >POSTS</h1>
+                </div>
+                <div> 
+                    <hr id="slider" 
+                        className={filterPersonneState ? "slide-in border-2 border-secondary" : "slide-in border-2 border-secondary active"}
+                    ></hr>
+                </div>
+                
+            </div>
+            
+            {filterPersonneState && <RechercheGestionAbo searchValue={searchValue}/>} 
+            {filterPostsState && <AffichageTops searchValue={searchValue}/>}  
+            <Footer SelectedIcon={"2"}/>
         </>
     )
 }

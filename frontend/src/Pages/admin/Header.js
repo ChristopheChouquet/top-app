@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { NavLink, useNavigate    } from "react-router-dom";
@@ -7,40 +7,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function Header({userDonne}) {
+function HeaderAdmin({userDonne}) {
 
     // initialisation de l'objet navigate
     const navigate = useNavigate(); 
-
-    const [infosUser, setInfosUser] = useState("");
-
-
-    useEffect(() => {
-
-        //On récupère le cookie
-            const cookie = document.cookie;
-        // Recherche du token d'authentification dans le cookie
-            const token = cookie.split(';').find(c => c.trim().startsWith(`auth`));
-        // Extrait la valeur du token d'authentification
-            const tokenValue = token ? token.split('=')[1] : null;
-            var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
-            !verifAuth && navigate('/login');
-
-        //On récupère l'iD du user connecté
-        const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
-
-
-
-        axios({
-            method: 'get',
-            url:   process.env.REACT_APP_BACKEND_URL + `/user/${currentUserId}`
-        }).then(function (response) {
-            setInfosUser(response.data[0]);
-        }).catch(() => { 
-            
-        });
-
-    },[]);
 
     //Gestion de la connexion user
     function logout() {  
@@ -74,9 +44,9 @@ function Header({userDonne}) {
                     <Menu as="div" className="relative inline-block text-left">
                         <div>
                             <Menu.Button>
-                                <img className="inline-block h-8 w-8 rounded-full"
-                                    src={process.env.PUBLIC_URL + '/' + infosUser.avatar}
-                                    alt="Avatar"
+                                <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                    src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    alt=""
                                 />
                             </Menu.Button>
                         </div>
@@ -93,19 +63,16 @@ function Header({userDonne}) {
                             <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
                                 <Menu.Item>
-                                {({ active }) => (     
-                                       
-                                    <NavLink to={`/profil/${infosUser.tagName}`}>
-                                        <button
-                                            type="button"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900 w-full text-left' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm w-full text-left'
-                                            )}
-                                        >
-                                        Profil
-                                        </button>
-                                    </NavLink>
+                                {({ active }) => (
+                                    <a
+                                    href="/profil"
+                                    className={classNames(
+                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        'block px-4 py-2 text-sm'
+                                    )}
+                                    >
+                                    Profil
+                                    </a>
                                 )}
                                 </Menu.Item>
                                 <Menu.Item>
@@ -114,8 +81,8 @@ function Header({userDonne}) {
                                         type="submit" 
                                         onClick={logout}
                                         className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900 w-full text-left' : 'text-gray-700',
-                                            'block px-4 py-2 text-sm w-full text-left'
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
                                         )}
                                     >
                                         Deconnexion
@@ -157,4 +124,4 @@ function Header({userDonne}) {
   )
 }
 
-export default Header;
+export default HeaderAdmin;

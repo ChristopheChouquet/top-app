@@ -7,7 +7,7 @@ function FavDayAdmin() {
 
         /* axios({
             method: 'get',
-            url: 'http://localhost:5000/favday'
+            url:   process.env.REACT_APP_BACKEND_URL + '/favday'
         }).then((response) => {
             setUser(response.data);
         }).catch((error) => {  

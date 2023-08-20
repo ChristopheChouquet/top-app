@@ -23,7 +23,7 @@ function FooterAdmin() {
         
         axios({
             method: 'post',
-            url: 'http://localhost:5000/logout'
+            url:   process.env.REACT_APP_BACKEND_URL + '/logout'
         }).then(function (response) {
             navigate('/login');
         }).catch(() => { 
@@ -33,7 +33,7 @@ function FooterAdmin() {
 
 
     return(
-        <footer id="footer" className='bg-tertiary-100 fixed bottom-0 w-screen'>
+        <footer id="footer" className='bg-tertiary-100 fixed bottom-0 w-screen mx-auto max-w-xl'>
             <div className='p-2.5 pr-0 flex items-center'>
 
               <div className="bg-tertiary-200 rounded-2xl flex justify-between items-center w-4/5 py-2.5 px-8">
@@ -62,7 +62,7 @@ function FooterAdmin() {
               </div> 
 
               <div className="w-1/5 flex justify-center">
-                <NavLink to='/topcreate'>
+                <NavLink to='/admin/topcreatefavday'>
                   <svg xmlns="http://www.w3.org/2000/svg" id="linkTopCreate" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="bg-secondary text-secondary rounded-full h-12 stroke-primary">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>

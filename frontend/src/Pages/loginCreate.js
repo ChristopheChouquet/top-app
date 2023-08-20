@@ -23,11 +23,10 @@ function LoginCreate() {
 
   //Ajout des nouveuax users dans la base de donnée
     function AddUser(data) {
-      console.log(data);
       // Enregistrement du nouvel user account
         axios({
           method: 'post',
-          url: 'http://localhost:5000/signup',
+          url:   process.env.REACT_APP_BACKEND_URL + '/signup',
           data: data
         }).then((response) => {
           setisExistAccount(false)

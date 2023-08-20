@@ -1,20 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from "axios";
 
 import Formlogin from '../Components/Formlogin';
 import { useNavigate } from 'react-router-dom';
 
+import { UserContext } from '../UserContext';
+import { useContext } from 'react';
+
 
 function Login() {
 
   //Gestion du useState de vérification si le compte existe ou non
-    const [UserAccountisOK, setUserAccountisOK] = useState(false);
-
+  const [UserAccountisOK, setUserAccountisOK] = useState(false);
   //Gestion du message d'erreur
-    const [MsgCompte, setMsgCompte] = useState('');
-
+  const [MsgCompte, setMsgCompte] = useState('');
   // initialisation de l'objet navigate
-    const navigate = useNavigate();   
+  const navigate = useNavigate();  
+  const { userDonne, setUserDonne } = useContext(UserContext);
+
 
   //Gestion de la connexion user
     function loginConnect(data) {
@@ -26,7 +29,7 @@ function Login() {
       
       axios({
           method: 'post',
-          url: 'http://localhost:5000/login',
+          url:   process.env.REACT_APP_BACKEND_URL + '/login',
           data: InfoUser
         }).then(function (response) {
           
@@ -44,6 +47,13 @@ function Login() {
             // Stockage du cookie dans le navigateur
             document.cookie = cookieString;
 
+            //Je mets mon UserContext à jour avec les donnée de l'utilisateur connecté
+            setUserDonne(response.data);
+            //Je mets également ces donnée dans le localStorage en cas de rafraichissement de la page 
+            localStorage.setItem('userData', JSON.stringify(response.data));
+
+
+
             setUserAccountisOK(true);
             setMsgCompte('');
             navigate('/loader');
@@ -53,6 +63,10 @@ function Login() {
         }); 
 
     }
+
+    /* useEffect(() => {
+      console.log('mon usercontext', userDonne);
+    }, [userDonne]); */
 
 
   return (

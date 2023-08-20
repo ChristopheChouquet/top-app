@@ -9,10 +9,23 @@ import jwt  from 'jsonwebtoken';
 
 //Importation du model requis pour les nouveaux
 import User from "../models/UserModel.js";
+
+//Fonction pour éviter les que les abonnements dans la BDD ne soit unique
+/* User.collection.dropIndex({ abonnement: 1 }, (err, result) => {
+    if (err) {
+      console.log('Erreur lors de la suppression de l\'index unique : ', err);
+    } else {
+      console.log('Index unique supprimé avec succès : ', result);
+    }
+  }); */
+
+//Pour l'upload des fichiers
+import axios from 'axios';
+import fs from 'fs';
+
  
 export const getUsers = async (req, res) => {
     try {
-        console.log(res);
         const users = await User.find();
         res.json(users);
     } catch (error) {
@@ -29,14 +42,9 @@ export const getUsersById = (req, res, next) => {
 };
 
 export const getUserProfil = async (req, res) => {
-    //On récupère le token du header
-    const tokenHeader = req.headers.authorization.split(' ')[1];
-    //On le décode
-    const decodedToken = jwt.verify(tokenHeader, 'RANDOM_TOKEN_SECRET_kfjhfsdjfhsdhfdsj6767232300YYHDBD');
-    //On en extrait le userId
-    const userId = decodedToken.userId;
+    const tagName = req.params.tagName;
 
-    User.findOne({ _id: userId })
+    User.findOne({ tagName: tagName })
     .then(user => res.status(200).json(user))
     .catch(error => res.status(400).json({ error }));
 }
@@ -48,6 +56,8 @@ export const saveUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
+            avatar: req.body.avatar,
+            banniere: req.body.banniere,
             pseudo: req.body.pseudo,
             tagName: req.body.tagName,
             email: req.body.email,
@@ -61,14 +71,157 @@ export const saveUser = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
  
-export const updateUser = async (req, res) => {
-    try {
-        const updateduser = await User.updateOne({_id:req.params.id}, {$set: req.body});
-        res.status(200).json(updateduser);
-    } catch (error) {
-        res.status(400).json({message: error.message});
+
+//Mise à jour des utilisateur depuis le profil
+export const updateUser = (req, res) => {
+    const { IDuser, pseudo, motCles } = req.body;
+    const avatar = req.body.avatar || null;
+    const banniere = req.body.banniere || null;
+
+
+    if (avatar !== null || banniere !== null) {
+        const avatarPromise = avatar !== null
+            ? axios.get(avatar, { responseType: 'arraybuffer' })
+            : Promise.resolve(null);
+        
+        const bannierePromise = banniere !== null
+            ? axios.get(banniere, { responseType: 'arraybuffer' })
+            : Promise.resolve(null);
+
+        Promise.all([avatarPromise, bannierePromise])
+            .then(([avatarResponse, banniereResponse]) => {
+                // Traiter l'avatar
+                if (avatarResponse !== null) {
+                    // Écrivez le contenu de l'image dans le fichier
+                    const fileName = IDuser + "_avatar.jpg";
+                    const destinationPath = "../frontend/public/img/avatar/" + fileName;
+                    fs.writeFile(destinationPath, avatarResponse.data, 'binary', (err) => {
+                        if (err) {
+                            console.error("Erreur lors de l'enregistrement de l'avatar :", err);
+                            return res.status(500).json({ error: "Erreur lors de l'enregistrement de l'avatar" });
+                        }
+                    });
+                }
+
+                // Traiter la bannière
+                if (banniereResponse !== null) {
+                    // Écrivez le contenu de l'image dans le fichier
+                    const fileName = IDuser + "_banniere.jpg";
+                    const destinationPath = "../frontend/public/img/banniere/" + fileName;
+                    fs.writeFile(destinationPath, banniereResponse.data, 'binary', (err) => {
+                        if (err) {
+                            console.error("Erreur lors de l'enregistrement de la bannière :", err);
+                            return res.status(500).json({ error: "Erreur lors de l'enregistrement de la bannière" });
+                        }
+                    });
+                }
+
+                updateUserFields();
+
+                function updateUserFields() {
+                    // Mettre à jour les champs de l'utilisateur une fois que les images ont été traitées
+                    User.updateOne({ _id: IDuser }, { 
+                        $set: { 
+                            avatar: avatarResponse !== null ? "img/avatar/" + IDuser + "_avatar.jpg" : undefined,
+                            banniere: banniereResponse !== null ? "img/banniere/" + IDuser + "_banniere.jpg" : undefined,
+                            pseudo: pseudo,
+                            motCles: motCles
+                        }
+                    })
+                    .then(() => {
+                        res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
+                    })
+                    .catch((error) => {
+                        res.status(400).json({ message: error.message });
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Erreur lors du téléchargement de l'image :", error);
+                return res.status(500).json({ error: "Erreur lors du téléchargement de l'image" });
+            });
+    } else {
+        // Mettre à jour les champs de l'utilisateur sans avatar ni bannière
+        User.updateOne({ _id: IDuser }, { $set: { pseudo: pseudo, motCles: motCles } })
+        .then(() => {
+            res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
+        })
+        .catch((error) => {
+            res.status(400).json({ message: error.message });
+        });
     }
-}
+};
+
+
+
+
+
+//Mise à jour des utilisateur depuis le profil
+export const updateAvatarUser = (req, res) => {
+    const { avatar, IDuser } = req.body; // Obtenez l'URL de l'image du corps de la requête
+  
+    axios
+      .get(avatar, { responseType: 'arraybuffer' })
+      .then((response) => {
+        // Écrivez le contenu de l'image dans le fichier
+        const fileName = IDuser + "_avatarCropped.jpg"; // Nom de fichier souhaité
+        const destinationPath = "../frontend/public/img/avatar/" + fileName; // Remplacez par le chemin de votre dossier final
+  
+        fs.writeFile(destinationPath, response.data, 'binary', (err) => {
+          if (err) {
+            console.error("Erreur lors de l'enregistrement de l'image :", err);
+            return res.status(500).json({ error: "Erreur lors de l'enregistrement de l'image" });
+          }
+    
+          // Envoyez une réponse indiquant que l'image a été enregistrée avec succès
+          res.json({ message: "Image enregistrée avec succès" });
+
+          console.log("img/avatar/" + fileName);
+
+          /* User.updateOne({ _id: IDuser }, { $set: { avatar: "img/avatar/" + fileName } })
+            .then(() => {
+                res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
+            })
+            .catch((error) => {
+                res.status(400).json({ message: error.message });
+            }); */
+          
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du téléchargement de l'image :", error);
+        return res.status(500).json({ error: "Erreur lors du téléchargement de l'image" });
+      });
+};
+
+
+
+
+//Ajout d'un abonnement dans les donnée de l'utilisateur actuel
+export const addUserAbo = (req, res, next) => {
+    const { UserCurrent, UserAbo } = req.body;
+    
+    User.findById(UserCurrent)
+        .then(user => {
+            user.abonnement.push(UserAbo);
+            return user.save();
+        })
+        .then(() => res.status(200).json({ message: "Abonnement mis à jour avec succès" }))
+        .catch(error => res.status(400).json({ error }));
+
+};
+
+
+
+
+//suppresion d'un abonnement dans les donnée de l'utilisateur actuel
+export const delUserAbo = (req, res, next) => {
+    const { UserCurrent, UserAbo } = req.body;
+    User.updateOne({ _id: UserCurrent }, { $pull: { abonnement: UserAbo }})
+        .then(() => res.status(200).json({ message: "Abonnement supprimé avec succès" }))
+        .catch(error => res.status(400).json({ error }));
+};
+
  
 export const deleteUser = async (req, res) => {
     try {
@@ -104,8 +257,12 @@ export const login = (req, res, next) => {
                     res.set('Authorization', `Bearer ${token}`);
                     //On revoie l'id et le token dans la réponse
                     res.status(200).json({
-                        userId: user._id, 
-                        token: token
+                        userId: user._id,
+                        pseudo: user.pseudo, 
+                        tagName: user.tagName, 
+                        email: user.email,
+                        token: token,
+                        
                     });
                     
                 }

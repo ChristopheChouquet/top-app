@@ -1,6 +1,24 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-function Footer() {
+function Footer({SelectedIcon}) {
+
+  useEffect(() => {
+    //On enlève les classes des icones du footer
+    if (SelectedIcon !== null) {
+      const footerIconSelector = document.querySelector(`#footer > div > div > a:nth-child(${SelectedIcon})`);
+      const selectAllSVGElement = footerIconSelector.querySelectorAll('*');
+      selectAllSVGElement.forEach((element) => {
+          element.classList.remove('stroke-tertiary-300');
+          element.classList.add('stroke-primary');
+      });
+    }
+    
+
+  // eslint-disable-next-line
+  }, []);
+
+
     return(
         <footer id="footer" className='bg-tertiary-100 fixed bottom-0 w-screen mx-auto max-w-xl'>
             <div className='p-2.5 pr-0 flex items-center'>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FooterAdmin from "./footer";
+import HeaderAdmin from "./Header";
 
 function UsersAdmin() {
 
@@ -19,7 +20,7 @@ function UsersAdmin() {
 
         axios({
             method: 'get',
-            url: 'http://localhost:5000/recherche'
+            url:   process.env.REACT_APP_BACKEND_URL + '/recherche'
         }).then((response) => {
             setUser(response.data);
         }).catch((error) => {  
@@ -40,6 +41,7 @@ function UsersAdmin() {
 
     return(
         <>
+            <HeaderAdmin/>
 
             <div className="mt-6 mb-20">
 
@@ -87,9 +89,11 @@ function UsersAdmin() {
                                     <p className="text-primary font-bold">ID : {user._id}</p>
                                     <p className="text-tertiary-300 font-semi">@{user.tagName}</p>
                                     <div className="flex flex-wrap">
-                                        {Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
-                                            <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
-                                        ))}
+                                        {user.motCles && (
+                                            Array(10).fill(null).map((_, i) => user.motCles[`chip${i+1}`] && (
+                                                <p className="text-tertiary-300 text-sm" key={i}>#{user.motCles[`chip${i+1}`]}&nbsp;</p>
+                                            ))
+                                        )}  
                                     </div>
                                 </div>
                             </div>
@@ -117,12 +121,6 @@ function UsersAdmin() {
 
                 
             </div>
-
-
-
-            
-
-
             <FooterAdmin/>
         </>
         

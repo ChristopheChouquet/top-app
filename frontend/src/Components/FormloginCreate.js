@@ -50,7 +50,6 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
             const copyDataChip = [...chipDataCreate, newChip ];
             setChipDataCreate(copyDataChip);
             setInputValueChip('');
-            console.log('chipDataCreate', copyDataChip);
         }
         
     }
@@ -62,23 +61,22 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
 
 
     const onSubmit = function(data) {
-        console.log('datas', data);
-        console.log('chipDataCreate', chipDataCreate);
-
+        
         const newUserAccount = {
+            avatar: "img/avatar/defaultUserImg.png",
+            banniere: "img/banniere/defaultUserBan.png",
             pseudo: data.pseudo,
             tagName : data.tagName,
             email: data.email,
             password: data.password,
             motCles: {}
         };
-
-        
+    
         //On parcours tous les mot clés et on récupére leur valeur
         for (let i = 0; i < chipDataCreate.length; i++) {
             newUserAccount.motCles[`chip${i+1}`] = chipDataCreate[i].valeur;
         }
-        console.log(newUserAccount);
+        
         //On envoie le nouveau top au serveur
         datas(newUserAccount);
         
@@ -92,7 +90,7 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
     return(
         <>
 
-            <h2 className='text-left font-bold text-2xl leading-5 m-10'>S'inscrire</h2>
+            <h2 className='text-left font-bold text-2xl leading-5 p-10'>S'inscrire</h2>
             <div className='flex flex-col items-center justify-center p-10'>
             
 
@@ -127,7 +125,6 @@ function FormloginCreate({ datas, isExistAccount, MsgCompte }) {
                         />
                         <p className="text-red-500">{errors.tagName && errors.tagName.message}</p>
                     </div>
-
 
                     <div className='mt-5'>
                         <label htmlFor="motCles" className="block text-sm text-tertiary-300 font-bold text-left">Centre d'intérêt</label>

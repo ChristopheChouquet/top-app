@@ -21,23 +21,9 @@ function TopCreate() {
             const tokenValue = token ? token.split('=')[1] : null;
             var verifAuth = typeof tokenValue !== 'undefined' && tokenValue !== null ? true : false;
             !verifAuth && navigate('/login');
-
-        //On enlève les classes des icones du footer
-        const footer = document.getElementById('footer').children[0].children[0];
-        for (let index = 0; index < 3; index++) {
-            const footerSVG = footer.children[index].children[0].children;
-            for (let indexSVG = 0; indexSVG < footerSVG.length; indexSVG++) {
-                const element = footerSVG[indexSVG];
-                element.classList.remove('stroke-primary');
-                element.classList.add('stroke-tertiary-300'); 
-            }
-        }
             
-
     // eslint-disable-next-line
-    }, []);
-    
-
+    }, []); 
     
 
     //Settigs des alertes
@@ -65,7 +51,7 @@ function TopCreate() {
         // Enregistrer le nouveau top 
         axios({
             method: 'post',
-            url: 'http://localhost:5000/tops',
+            url:   process.env.REACT_APP_BACKEND_URL + '/tops',
             data: datasForm,
             headers: {
               Authorization: 'Bearer ' + tokenValue
@@ -87,7 +73,7 @@ function TopCreate() {
         <>
             <Header/>
             <FormTopCreate datas={SaveTop} />
-            <Footer/>
+            <Footer SelectedIcon={null}/>
         </>
         
     )
