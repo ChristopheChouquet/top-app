@@ -5,9 +5,13 @@ import imageCompression from 'browser-image-compression';
 
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-import ImageCropDialog from "../Components/cropV2/ImageCropDialog";
+import ImageCropDialog from "../Components/Crop/ImageCropDialog";
+import { useNavigate } from "react-router-dom";
 
 function ProfilEdit({datas}) {
+
+    // initialisation de l'objet navigate
+    const navigate = useNavigate(); 
 
     //Mise en place de la gestion du form avec useForm
     const {register, handleSubmit, formState: {errors}} = useForm();
@@ -18,7 +22,6 @@ function ProfilEdit({datas}) {
     const [imageselectBan, setImageSelectBan] = useState(null);
     const [imgs, setImgs] = useState([]);
     const [imgsBan, setImgsBan] = useState([]);
-    const [imgsUpdate, setImgsUpdate] = useState([]);
 
     const aspectRatios = [
         { value: 1/1, text:"avatar" },
@@ -61,7 +64,7 @@ function ProfilEdit({datas}) {
 
         setImageSelect(null);
         setImageSelectBan(null);
-     
+      
     }; 
 
     const onCancel = () => {
@@ -115,115 +118,108 @@ function ProfilEdit({datas}) {
         const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
 
         const optionsCompress = {
-            maxSizeMB: 0.03, // Taille maximale de l'image compressée en Mo (30 Ko dans cet exemple)
-            maxWidthOrHeight: 100, // Largeur ou hauteur maximale de l'image
+            maxSizeMB: 1, // Taille maximale de l'image compressée en Mo (30 Ko dans cet exemple)
+            maxWidthOrHeight: 600, // Largeur ou hauteur maximale de l'image
             useWebWorker: true, // Utilisation d'un Web Worker pour la compression
             fileType: 'jpeg', // Format de fichier de sortie (jpeg dans cet exemple)
             maxIteration: 10, // Nombre maximum d'itérations de compression
             initialQuality: 1, // Qualité de compression initiale (entre 0 et 1)
         };
 
-        if (imgs) {
-            fetch(imgs)
-            .then((response) => response.blob())
-            .then((blob) => {
-                
         
-                imageCompression(blob, optionsCompress)
+            const updateUserData = {};
+
+            if (data.pseudo || user.motCles) {
+                updateUser()
+            }
+            
+        
+            const fetchAvatar = imgs.length !== 0
+            ? fetch(imgs)
+                .then((response) => response.blob())
+                .then((blob) => imageCompression(blob, optionsCompress))
                 .then((compressedFile) => {
-                // Convertir le fichier compressé en base64
                 const reader = new FileReader();
                 reader.readAsDataURL(compressedFile);
-                reader.onloadend = () => {
+                return new Promise((resolve, reject) => {
+                    reader.onloadend = () => {
                     const compressedBase64Image = reader.result;
-
-                    // Récupérer la taille de l'image compressée
                     const byteLength = compressedBase64Image.length;
                     const kilobytes = Math.ceil(byteLength / 1024);
-        
                     setImgs(compressedBase64Image);
                     console.log(kilobytes + ' Ko');
-
-
-                    const updateUserAccount = {
-                        IDuser: currentUserId,
-                        avatar: compressedBase64Image,
-                        pseudo: newPseudo,
-                        motCles: user.motCles
+                    updateUserData.avatar = compressedBase64Image;
+                    resolve();
                     };
-
-                    axios({
-                        method: 'post',
-                        url:   process.env.REACT_APP_BACKEND_URL + '/updateuser',
-                        data: updateUserAccount
-                    }).then((response) => {
-                        console.log(response);
-                    }).catch((error) => { 
-                        console.error(error);
-                    });
-                };
+                    reader.onerror = reject;
+                });
                 })
                 .catch((error) => {
                 console.error('Erreur lors de la compression de l\'image :', error);
-                }) 
-            })
-            .catch((error) => {
-                console.error('Erreur lors de la récupération du Blob:', error);
-            });
-        }
+                })
+            : Promise.resolve(); // Si imgs.length === 0, on résout directement une promesse résolue.
 
-        if (imgsBan) {
-            fetch(imgsBan)
-            .then((response) => response.blob())
-            .then((blob) => {
-                        
-                imageCompression(blob, optionsCompress)
+            const fetchBanniere = imgsBan.length !== 0
+            ? fetch(imgsBan)
+                .then((response) => response.blob())
+                .then((blob) => imageCompression(blob, optionsCompress))
                 .then((compressedFile) => {
-                // Convertir le fichier compressé en base64
                 const reader = new FileReader();
                 reader.readAsDataURL(compressedFile);
-                reader.onloadend = () => {
+                return new Promise((resolve, reject) => {
+                    reader.onloadend = () => {
                     const compressedBase64Image = reader.result;
-
-                    // Récupérer la taille de l'image compressée
                     const byteLength = compressedBase64Image.length;
                     const kilobytes = Math.ceil(byteLength / 1024);
-        
                     setImgsBan(compressedBase64Image);
                     console.log(kilobytes + ' Ko');
-
-
-                    const updateUserAccount = {
-                        IDuser: currentUserId,
-                        banniere: compressedBase64Image,
-                        pseudo: newPseudo,
-                        motCles: user.motCles
+                    updateUserData.banniere = compressedBase64Image;
+                    resolve();
                     };
-
-                    axios({
-                        method: 'post',
-                        url:   process.env.REACT_APP_BACKEND_URL + '/updateuser',
-                        data: updateUserAccount
-                    }).then((response) => {
-                        console.log(response);
-                    }).catch((error) => { 
-                        console.error(error);
-                    });
-                };
+                    reader.onerror = reject;
+                });
                 })
                 .catch((error) => {
                 console.error('Erreur lors de la compression de l\'image :', error);
-                }) 
-            })
-            .catch((error) => {
-                console.error('Erreur lors de la récupération du Blob:', error);
-            });
-        }
+                })
+            : Promise.resolve(); // Si imgsBan.length === 0, on résout directement une promesse résolue.
 
+            Promise.all([fetchAvatar, fetchBanniere])
+                .then(() => {
+                // Les deux fetch sont terminés, on peut appeler updateUser ici
+                console.log('Les deux fetch sont terminés, on peut appeler updateUser ici');
+                updateUser();
+                })
+                .catch((error) => {
+                console.error('Erreur lors du téléchargement et de la compression des images :', error);
+                });
         
-        
+            function updateUser() {
+                const updateUserAccount = {
+                    IDuser: currentUserId,
+                    pseudo: newPseudo,
+                    motCles: user.motCles,
+                    ...updateUserData,
+                };
 
+                console.log('updateUserAccount', updateUserAccount);
         
+                axios({
+                    method: 'post',
+                    url: process.env.REACT_APP_BACKEND_URL + '/updateuser',
+                    data: updateUserAccount,
+                })
+                    .then((response) => {
+                        console.log(response);
+                        navigate(`/profil/${user.tagName}`);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        
+        
+ 
     }
 
 

@@ -5,6 +5,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import AffichageTops from "../Components/AffichageTops";
+import RechercheGestionAbo from "../Components/RechercheGestionAbo";
 
 function Profil() {
 
@@ -25,6 +26,9 @@ function Profil() {
 
     useEffect(() => {
     
+        setFilterTops(true);
+        setFilterWall(false);
+        setFilterLikes(false);
 
         axios({
             method: 'get',
@@ -222,7 +226,7 @@ function Profil() {
                                 className={"cursor-pointer"}
                                 onClick={() => setFilterStates('wall') }
                             >
-                                <h1 className={filterWall ? "font-bold text-secondary" : " font-bold animate-text text-tertiary-300 "}>WALL</h1>
+                                <h1 className={filterWall ? "font-bold text-secondary" : " font-bold animate-text text-tertiary-300 "}>ABOS</h1>
                             </div>
                             <div 
                                 id="likes"
@@ -247,7 +251,7 @@ function Profil() {
                         </div>
                         
                         { filterTops && <AffichageTops userIdProfil={user._id}/> }
-                        { filterWall && <AffichageTops userIdProfil={user._id}/> }
+                        { filterWall && <RechercheGestionAbo searchValue={''}  profilID={user._id}/> }
                         { filterLikes && <AffichageTops userIdProfilLike={user._id}/> }
 
                     </div>

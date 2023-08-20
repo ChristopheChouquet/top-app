@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 
 
-function RechercheGestionAbo({searchValue}) {
+function RechercheGestionAbo({searchValue, profilID}) {
 
 // Stockage des tops
 const [user, setUser] = useState([]); 
@@ -19,17 +19,33 @@ useEffect(() => {
         method: 'get',
         url:   process.env.REACT_APP_BACKEND_URL + '/recherche'
     }).then((response) => {
-        // Supprimer l'utilisateur connecté de la liste 
-        const filteredUsers = response.data.filter(user => user._id !== userId);
-        setUser(filteredUsers);
 
-        // Récupération des abonnements actifs de l'utilisateur connecté
-        const currentUser = response.data.filter(user => user._id === userId)[0];
-        const currentUserAbo = currentUser ? currentUser.abonnement : [];
-        setAbo(currentUserAbo);
+        //Si l'appel du composant viens du profil
+        if (profilID) {
+
+            // Récupération des abonnements actifs de l'utilisateur connecté
+            const currentUser = response.data.filter(user => user._id === profilID)[0];
+            const currentUserAbo = currentUser ? currentUser.abonnement : [];
+            setAbo(currentUserAbo); 
+
+            // Récupération des utilisateurs des abonnements  
+            const filteredUsers = response.data.filter(user => currentUserAbo.includes(user._id));
+            setUser(filteredUsers);
+        //Si l'appel du composant viens de la recherche
+        }else{
+
+            // Supprimer l'utilisateur connecté de la liste 
+            const filteredUsers = response.data.filter(user => user._id !== userId);
+            setUser(filteredUsers);
+
+            // Récupération des abonnements actifs de l'utilisateur connecté
+            const currentUser = response.data.filter(user => user._id === userId)[0];
+            const currentUserAbo = currentUser ? currentUser.abonnement : [];
+            setAbo(currentUserAbo);
+
+        }
         
-
-
+        
     }).catch((error) => {  
         console.error(error);
     }); 
@@ -37,6 +53,7 @@ useEffect(() => {
 
 // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
+
 
     function abonnement(etat, userClicked) {
         
@@ -70,7 +87,7 @@ useEffect(() => {
             user.pseudo.toLowerCase().includes(searchValue.toLowerCase()) ||
             user.tagName.toLowerCase().includes(searchValue.toLowerCase())
         );
-    });
+    })
 
 
 
@@ -84,7 +101,7 @@ return(
                     <NavLink to={`/profil/${user.tagName}`}>
                         <div className="flex items-start"> 
                             <img className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
-                                src={user.avatar}
+                                src={`/${user.avatar}`}
                                 alt="Avatar"
                             />
                             <div>
@@ -102,20 +119,22 @@ return(
                         </div> 
                     </NavLink>
                 </div>
-                <div className="">
-                    <label htmlFor={`abonne_${user._id}`} className="flex justify-center items-center p-2 rounded-md cursor-pointer">
-                        <input 
-                            id={`abonne_${user._id}`} 
-                            type="checkbox" 
-                            className="hidden peer"
-                            onChange={(event) => abonnement(event, user._id)}
-                            defaultChecked={abo.includes(user._id)}
-                            />
-                        <span className="font-bold border border-secondary px-4 py-2 rounded-3xl dark:bg-tertiary-100 peer-checked:dark:bg-secondary text-primary text-center checkAbo">
-                            { abo.includes(user._id) ? "ABONNÉ(E)" : "S'ABONNER" }
-                        </span>
-                    </label>
-                </div>
+                {!profilID && (
+                    <div className="">
+                        <label htmlFor={`abonne_${user._id}`} className="flex justify-center items-center p-2 rounded-md cursor-pointer">
+                            <input 
+                                id={`abonne_${user._id}`} 
+                                type="checkbox" 
+                                className="hidden peer"
+                                onChange={(event) => abonnement(event, user._id)}
+                                defaultChecked={abo.includes(user._id)}
+                                />
+                            <span className="font-bold border border-secondary px-4 py-2 rounded-3xl dark:bg-tertiary-100 peer-checked:dark:bg-secondary text-primary text-center checkAbo">
+                                { abo.includes(user._id) ? "ABONNÉ(E)" : "S'ABONNER" }
+                            </span>
+                        </label>
+                    </div>
+                )}
             </div>
         </div>
     ))}

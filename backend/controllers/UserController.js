@@ -100,7 +100,6 @@ export const updateUser = (req, res) => {
                             console.error("Erreur lors de l'enregistrement de l'avatar :", err);
                             return res.status(500).json({ error: "Erreur lors de l'enregistrement de l'avatar" });
                         }
-                        updateUserFields();
                     });
                 }
 
@@ -114,9 +113,10 @@ export const updateUser = (req, res) => {
                             console.error("Erreur lors de l'enregistrement de la bannière :", err);
                             return res.status(500).json({ error: "Erreur lors de l'enregistrement de la bannière" });
                         }
-                        updateUserFields();
                     });
                 }
+
+                updateUserFields();
 
                 function updateUserFields() {
                     // Mettre à jour les champs de l'utilisateur une fois que les images ont été traitées
