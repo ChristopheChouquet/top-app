@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import GestionLike from "./GestionLike";
 import { NavLink } from "react-router-dom";
 
-function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
+function AffichageTop({ IDTop }) {
 
-    // Stockage all infos
-        const [allInfos, setAllInfos] = useState([]);
+    // Stockage des infos du top  
+        const [infosTop, setInfosTop] = useState([]);
+    // Stockage des infos du createur du top  
+        const [infosTopMaker, setInfosTopMaker] = useState([]);
     //Chargement des datas
         const [loading, setLoading] = useState(true);
     //On récupère l'iD du user connecté
@@ -14,93 +16,46 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
 
     useEffect(() => {
 
-        
-
+        // Récuperation infos top  
         axios({
             method: 'get',
-            url: process.env.REACT_APP_BACKEND_URL + '/tops'
+            url:   process.env.REACT_APP_BACKEND_URL + `/tops/${IDTop}`
         }).then((response) => {
-            // eslint-disable-next-line
-            response.data.map((item) => {
 
-                axios({
-                    method: 'get',
-                    url: `${process.env.REACT_APP_BACKEND_URL}/user/${item.userId}`
-                }).then((response) => {
-                    
-                    if (item.userId === response.data[0]._id) {
+            const date = new Date(response.data[0].date);
+            const jour = ('0' + date.getDate()).slice(-2);
+            const mois = ('0' + (date.getMonth() + 1)).slice(-2);
+            const annee = date.getFullYear().toString();  
+            const dateFormatee = `${jour}/${mois}/${annee}`;
 
-                        const date = new Date(item.date);
-                        const jour = ('0' + date.getDate()).slice(-2);
-                        const mois = ('0' + (date.getMonth() + 1)).slice(-2);
-                        const annee = date.getFullYear().toString();  
-                        const dateFormatee = `${jour}/${mois}/${annee}`;
-                        
-                        const RecupAllInfos = {
-                            userId: item.userId, 
-                            topId: item._id,
-                            avatar: response.data[0].avatar,
-                            pseudo: response.data[0].pseudo,
-                            tagName: response.data[0].tagName,
-                            date: dateFormatee,
-                            keywords: item.motCle,
-                            titre: item.titre,
-                            choix: item.choix,
-                            like: item.like   
-                        }
-                        
-                        setAllInfos(allInfos => [...allInfos, RecupAllInfos]);
-                        
-                         
-                    }
-                }).catch((error) => { 
-                    console.error(error);
-                });
-                
-            });
-            
-            setLoading(false); // fin du chargement des données après 5 secondes         
+            const nouvelleInfosTop = { ...response.data[0], date: dateFormatee };
+            console.log('response', nouvelleInfosTop);
+            setInfosTop(nouvelleInfosTop);
+
+            // Récuperation infos créateur du top 
+            axios({
+                method: 'get',
+                url:   process.env.REACT_APP_BACKEND_URL + `/user/${response.data[0].userId}`
+            }).then((response) => {
+    
+                console.log('response', response.data[0]);
+                setInfosTopMaker(response.data[0]);
+                setLoading(false); // fin du chargement des données après 5 secondes 
+    
+            }).catch((error) => { 
+                console.error(error);
+            }); 
+
         }).catch((error) => { 
             console.error(error);
         }); 
 
         
+
+        
             
     }, []);
 
-
-    // Utilisez la méthode filter() pour filtrer les tops en fonction de la recherche
-    if (searchValue) {
-        var filteredTops = allInfos.filter((top) => {
-            const searchValueLowerCase = searchValue.toLowerCase();
-            const pseudoLowerCase = top.pseudo.toLowerCase();
-            const titreLowerCase = top.titre.toLowerCase();
-            const motCleLowerCase = Object.values(top.keywords).flat().map(keyword => keyword.toLowerCase());
-
-            const pseudoMatches = pseudoLowerCase.includes(searchValueLowerCase);
-            const titreMatches = titreLowerCase.includes(searchValueLowerCase);
-            const motCleMatches = motCleLowerCase.some(keyword => keyword.includes(searchValueLowerCase));
-            return titreMatches || motCleMatches || pseudoMatches;
-        });
-    }else if(userIdProfil){
-        filteredTops = allInfos.filter((top) => {
-            const searchValueLowerCase = userIdProfil.toLowerCase();
-            const userIdLowerCase = top.userId.toLowerCase();
-
-            const userIdoMatches = userIdLowerCase.includes(searchValueLowerCase);
-            return userIdoMatches;
-        });
-    }else if(userIdProfilLike){
-        filteredTops = allInfos.filter((top) => {
-            const searchValueLowerCase = userIdProfilLike.toLowerCase();
-            const users = top.like.users;
-            const userIds = users.map(user => user.toLowerCase());
-
-            return userIds.includes(searchValueLowerCase);
-        });
-    }else{
-        filteredTops = [...allInfos];
-    }
         
  
 
@@ -125,27 +80,27 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
                 ) : (
                 <div>
                     <div id="home" className="flex flex-wrap justify-center mb-16 pt-20">
-                    {filteredTops.map(top => (
+                    
                         
-                        <div key={top.topId} className="w-4/5 border-2 border-secondary flex flex-wrap p-2.5 my-2 rounded-lg text-left justify-start">
-                            <div >
+                        <div key={infosTop._id} id={infosTop._id} className="w-4/5 border-2 border-secondary flex flex-wrap p-2.5 my-2 rounded-lg text-left justify-start">
+                            <div>
 
-                                <NavLink to={`/profil/${top.tagName}`}>
+                                <NavLink to={`/profil/${infosTopMaker.tagName}`}>
                                     <div className="flex">
                                         <div>
                                             <img 
                                                 className="inline-block h-12 w-12 mr-2 rounded-full ring-2 ring-white"
-                                                src={process.env.PUBLIC_URL + '/' + top.avatar}
-                                                alt={`Avatar de ${top.pseudo}`}
+                                                src={process.env.PUBLIC_URL + '/' + infosTopMaker.avatar}
+                                                alt={`Avatar de ${infosTopMaker.pseudo}`}
                                             />
                                         </div>
                                         
                                         <div>
-                                            <p className="font-semi">{top.pseudo}<span className="font-normal text-tertiary-300"> @{top.tagName} / {top.date}</span></p>
-                                            <p className="text-primary font-bold font-myriad">{top.titre}</p>
+                                            <p className="font-semi">{infosTopMaker.pseudo}<span className="font-normal text-tertiary-300"> @{infosTopMaker.tagName} / {infosTop.date}</span></p>
+                                            <p className="text-primary font-bold font-myriad">{infosTop.titre}</p>
                                             <div className="flex flex-wrap">
-                                                {Array(10).fill(null).map((_, i) => top.keywords[`chip${i+1}`] && (
-                                                    <p className="text-tertiary-300 text-sm " key={i}>#{top.keywords[`chip${i+1}`]}&nbsp;</p>
+                                                {Array(10).fill(null).map((_, i) => infosTop.motCle[`chip${i+1}`] && (
+                                                    <p className="text-tertiary-300 text-sm " key={i}>#{infosTop.motCle[`chip${i+1}`]}&nbsp;</p>
                                                 ))}
                                             </div>
                                         </div>
@@ -157,12 +112,10 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
                                 </div>
 
                                 {/* Liste des choix */}
-                                {Array(10).fill(null).map((_, i) => top.choix[`choix${i+1}`] && (
-                                    <NavLink to={`/top/${top.topId}`}>
-                                        <p className="text-md font-medium" key={i}>
-                                            <span className="font-nunito font-black text-primary">{i+1}&#x2802;</span>{top.choix[`choix${i+1}`]}
-                                        </p>
-                                    </NavLink>
+                                {Array(10).fill(null).map((_, i) => infosTop.choix[`choix${i+1}`] && (
+                                    <p className="text-md font-medium" key={i}>
+                                        <span className="font-nunito font-black text-primary">{i+1}&#x2802;</span>{infosTop.choix[`choix${i+1}`]}
+                                    </p>
                                 ))}
                             </div>
 
@@ -181,7 +134,7 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
                                 </div>
                                 
                                 {/* like */}
-                                <GestionLike currentTopId={top.topId} currentUserId={currentUserId}/>
+                                <GestionLike currentTopId={infosTop._id} currentUserId={currentUserId}/>
                                 
                                 {/* commentaires */}
                                 <div className="flex">
@@ -209,7 +162,7 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
 
                             </div> 
                         </div>
-                    ))}
+                   
                     </div>
                 </div>
                 )}
@@ -221,4 +174,4 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
     )
 }
 
-export default AffichageTops;
+export default AffichageTop;

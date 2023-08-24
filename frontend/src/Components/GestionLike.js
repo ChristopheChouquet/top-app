@@ -13,6 +13,7 @@ function GestionLike({ currentTopId, currentUserId }) {
             method: 'get',
             url:   process.env.REACT_APP_BACKEND_URL + `/tops/${currentTopId}` 
         }).then((response) => {
+            
 
             // cloner l'objet "data" pour éviter de modifier le state directement
             const newData = {...response.data[0].like};

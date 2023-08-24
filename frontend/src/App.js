@@ -16,6 +16,8 @@ import FavDay from './Pages/favDay';
 import { UserProvider } from './UserContext';
 import FormTopCreateFavDay from './Pages/admin/FormTopCreateFavDay';
 import AffichageTops from './Components/AffichageTops';
+import AffichageTop from './Components/AffichageTop';
+import Top from './Pages/top';
 import ProfilEdit from './Pages/profilEdit';
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/affichagetops' element={<AffichageTops/>}/>
+            <Route path='/affichagetop' element={<AffichageTop/>}/>
+            <Route path='/top/:topId' element={<Top/>}/>
             <Route path='/' element={<Home />}/>
           </Routes>
         </BrowserRouter>
