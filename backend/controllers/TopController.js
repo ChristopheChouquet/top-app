@@ -33,6 +33,28 @@ export const UpdatedTopsLikes = (req, res, next) => {
 };
 
 
+
+export const saveComm = (req, res, next) => {
+
+    const topId = req.params.topId;
+    const comms = req.body;
+
+    Top.findOneAndUpdate({ _id: topId }, { $push: { commentaires: comms } })
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(400).json({ error }));
+    
+};
+
+
+export const getComms = (req, res, next) => {
+    const topId = req.params.topId;
+
+    Top.find({ _id: topId })
+    .then(tops => res.status(200).json(tops))
+    .catch(error => res.status(400).json({ error }));
+};
+
+
 export const saveTop = (req, res, next) => {
     
     //On récupère le token du header
