@@ -39,8 +39,6 @@ function GestionLike({ currentTopId, currentUserId }) {
 
     function gestionLike(){
 
-        
-
         // cloner l'objet "likes" pour éviter de modifier le state directement        
         const updatedLikes = { ...likes }; 
     

@@ -16,7 +16,7 @@ function Login() {
   const [MsgCompte, setMsgCompte] = useState('');
   // initialisation de l'objet navigate
   const navigate = useNavigate();  
-  const { userDonne, setUserDonne } = useContext(UserContext);
+  const { setUserDonne } = useContext(UserContext);
 
 
   //Gestion de la connexion user
@@ -52,8 +52,6 @@ function Login() {
             //Je mets également ces donnée dans le localStorage en cas de rafraichissement de la page 
             localStorage.setItem('userData', JSON.stringify(response.data));
 
-
-
             setUserAccountisOK(true);
             setMsgCompte('');
             navigate('/loader');
@@ -63,10 +61,6 @@ function Login() {
         }); 
 
     }
-
-    /* useEffect(() => {
-      console.log('mon usercontext', userDonne);
-    }, [userDonne]); */
 
 
   return (

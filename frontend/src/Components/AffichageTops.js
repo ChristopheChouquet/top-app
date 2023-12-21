@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import GestionLike from "./GestionLike";
 import { NavLink } from "react-router-dom";
+import GestionCommentaires from "./GestionCommentaires";
 
 function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
 
@@ -13,8 +14,6 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
         const currentUserId = JSON.parse(localStorage.getItem("userData")).userId;
 
     useEffect(() => {
-
-        
 
         axios({
             method: 'get',
@@ -184,12 +183,7 @@ function AffichageTops({ searchValue, userIdProfil, userIdProfilLike }) {
                                 <GestionLike currentTopId={top.topId} currentUserId={currentUserId}/>
                                 
                                 {/* commentaires */}
-                                <div className="flex">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 36.1 36.6" fill="none" strokeWidth={1.5}  className="w-6 h-6">
-                                        <path stroke="#1D1D1B" d="M4,28.1l-2.5,7.8l7.7-2.9c2.6,1.5,5.6,2.4,8.8,2.4c9.6,0,17.3-7.8,17.3-17.3c0-9.6-7.8-17.3-17.3-17.3
-                                        C8.5,0.8,0.8,8.5,0.8,18.1c0,0.8,0.1,1.7,0.2,2.5"/>
-                                    </svg>&nbsp;<span className="text-sm">1</span>
-                                </div>
+                                <GestionCommentaires currentTopId={top.topId} currentUserId={currentUserId}/>
 
                                 {/* Same fav */}
                                 <div className="flex">

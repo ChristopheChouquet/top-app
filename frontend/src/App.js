@@ -19,8 +19,73 @@ import AffichageTops from './Components/AffichageTops';
 import AffichageTop from './Components/AffichageTop';
 import Top from './Pages/top';
 import ProfilEdit from './Pages/profilEdit';
+import axios from 'axios';
+import { useState } from 'react';
+
+
+export function RecupInfosTop(IDTop) {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url: process.env.REACT_APP_BACKEND_URL + `/tops/${IDTop}`
+    })
+      .then((response) => {
+
+        const date = new Date(response.data[0].date);
+        const jour = ('0' + date.getDate()).slice(-2);
+        const mois = ('0' + (date.getMonth() + 1)).slice(-2);
+        const annee = date.getFullYear().toString();  
+        const dateFormatee = `${jour}/${mois}/${annee}`;
+
+        const nouvelleInfosTop = { ...response.data[0], date: dateFormatee };
+        resolve(nouvelleInfosTop);
+
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+}
+
+export function RecupInfosUser(IDUser) {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url:   process.env.REACT_APP_BACKEND_URL + `/user/${IDUser}`
+    }).then((response) => {
+
+      resolve(response.data[0]);
+
+    }).catch((error) => { 
+        console.error(error);
+    }); 
+  });
+}
+
+
+export function RecupCommsTop(IDTop) {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url:   process.env.REACT_APP_BACKEND_URL + `/commentaires/${IDTop}`,
+    }).then((response) => {
+
+      resolve(response.data[0].commentaires);
+
+    }).catch((error) => { 
+        console.error(error);
+    }); 
+  });
+}
+
+
+
 
 function App() {
+
+
+
   return (
     <div className="App mx-auto max-w-xl bg-tertiary-100 h-auto min-h-screen">
       <UserProvider>
@@ -38,7 +103,7 @@ function App() {
             <Route path='/admin/topcreatefavday' element={<FormTopCreateFavDay/>}/>
             <Route path='/logincreate' element={<LoginCreate/>}/>
             <Route path='/affichagetops' element={<AffichageTops/>}/>
-            <Route path='/affichagetop' element={<AffichageTop/>}/>
+            <Route path='/affichagetop' element={<AffichageTop RecupInfosUser={RecupInfosUser}/>}/>
             <Route path='/top/:topId' element={<Top/>}/>
             <Route path='/' element={<Home />}/>
           </Routes>
